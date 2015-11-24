@@ -2,15 +2,30 @@ package views;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JMenuBar;
+
+import java.awt.Font;
+import java.awt.Toolkit;
+
+import javax.swing.JTabbedPane;
+
+import controllers.*;
+
+
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 
 
 
@@ -34,17 +49,15 @@ public class JanelaPrincipal extends JFrame{
 	
 	
 	//variaveis de menu
-	private JMenu mnuLogin   = new JMenu ("Login"),	
-	mnuAdm  = new JMenu("Funcionarios administrativos"),
-	mnuSaude  = new JMenu("Profissionais da saude"),
-	mnuAgConsultas = new JMenu("Agendamento de Consultas"),
-	mnuRgConsultas = new JMenu("Registro de Consultas");
-	JMenuBar mbarMain = new JMenuBar();
-	private JMenuItem 	smnuAdmListar = new JMenuItem("Buscar"),
-						smnuAdmIn = new JMenuItem("Excluir"),
-						smnuSaudeListar = new JMenuItem("Buscar"),
-						smnuSaudeIn = new JMenuItem("Excluir");
+	private JButton mnuInicio  = new MeuBtn("Inicio"),
+					mnuAdm  = new MeuBtn("Funcionarios administrativos"),
+					mnuSaude  = new MeuBtn("Profissionais da saude"),
+					mnuAgConsultas = new MeuBtn("Agendamento de Consultas"),
+					mnuRgConsultas = new MeuBtn("Registro de Consultas"),
+					mnuSair  = new MeuBtn("Sair");
+
 	
+
 						
 	
 	
@@ -53,6 +66,7 @@ public class JanelaPrincipal extends JFrame{
 		
 		//montando janela
 		super("Clinica maligna");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(JanelaPrincipal.class.getResource("/material/icon.png")));
 		this.setSize(1200,800);
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.addWindowListener(fechar());
@@ -60,30 +74,35 @@ public class JanelaPrincipal extends JFrame{
 		cntForm = this.getContentPane();
 		cntForm.setLayout (new BorderLayout());
 	
+	
+	
 		
 		//montando paineis
 		pnlBotoes.setLayout (flwBotoes);
 		cntForm.add (pnlBotoes,  BorderLayout.NORTH);
+		areaStates.setBackground(new Color(255, 0, 0));
 		cntForm.add (areaStates,  BorderLayout.CENTER);
 		
 
-
 		
-		//montando menus
 		
-		mbarMain.add(mnuLogin);
 		
-			mnuAdm.add(smnuAdmListar);
-			mnuAdm.add(smnuAdmIn);
-		mbarMain.add(mnuAdm);
 		
-			mnuSaude.add(smnuSaudeListar);
-			mnuSaude.add(smnuSaudeIn);
-		mbarMain.add(mnuSaude);
 		
-		mbarMain.add(mnuAgConsultas);
-		mbarMain.add(mnuRgConsultas);
-		pnlBotoes.add(mbarMain);
+		
+		//montando os botoes
+		mnuInicio.addActionListener(ControllerPrincipal.mudador("inicio"));
+		mnuAdm.addActionListener(ControllerPrincipal.mudador("funcionarios administrativos"));
+		mnuSaude.addActionListener(ControllerPrincipal.mudador("profissionais saude"));
+		mnuSair.addActionListener(ControllerPrincipal.mudador("sair"));
+		
+		pnlBotoes.add(mnuInicio);
+		pnlBotoes.add(mnuAdm);
+		pnlBotoes.add(mnuSaude);
+		pnlBotoes.add(mnuAgConsultas);
+		pnlBotoes.add(mnuRgConsultas);
+		pnlBotoes.add(mnuSair);
+		pnlBotoes.setBackground(Color.WHITE);
 		
 		
 		
@@ -92,6 +111,21 @@ public class JanelaPrincipal extends JFrame{
 		
 		
 	}
+	/*
+	 * inner class meu btn
+	 */
+	private class MeuBtn extends JButton{
+		private Color hoverBackgroundColor;
+        private Color pressedBackgroundColor;
+
+		public MeuBtn(String nome){
+			super(nome);
+			this.setBackground(new Color(255, 255, 255));
+			this.setForeground(new Color(255, 0, 0));
+			this.setBorderPainted(false);
+		}
+	}
+	
 	
 	/*
 	 * operacoes coma janela
@@ -108,14 +142,13 @@ public class JanelaPrincipal extends JFrame{
 	}
 	
 	public void definirLogado() {
+		pnlBotoes.setVisible(true);
 
 		
 	}
 	public void definirDeslogado() {
-		mnuAdm.setVisible(false);
-		mnuSaude.setVisible(false);
-		mnuAgConsultas.setVisible(false);
-		mnuRgConsultas.setVisible(false);
+		pnlBotoes.setVisible(false);
+
 		
 	}
 	
