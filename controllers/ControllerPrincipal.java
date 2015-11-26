@@ -11,6 +11,7 @@ import javax.swing.UIManager;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
+import model.Conexao;
 import views.JanelaPrincipal;
 import views.states.StateLogin;
 import views.states.States;
@@ -28,6 +29,8 @@ public class ControllerPrincipal {
 
 	public static void main(String[] args) throws Exception{
 		
+		if(!Conexao.test()) return;
+		Conexao.iniciar();
 		try {
 			UIManager.setLookAndFeel(
 				UIManager.getSystemLookAndFeelClassName());
@@ -39,8 +42,8 @@ public class ControllerPrincipal {
 		SwingUtilities.invokeLater(new Runnable() {
             public void run() {
             	janela.setVisible(true);
-            	
-        		deslogar();
+            	logar("123456");
+        		//deslogar();
             }
         });
 
@@ -56,8 +59,8 @@ public class ControllerPrincipal {
 			id = id_;
 			logado = true;
 			janela.definirLogado();
-			states.go("inicio");
-		
+			states.go("funcionarios administrativos");
+			//states.go("inicio");
 	}
 	public static void deslogar(){
 			id = "";

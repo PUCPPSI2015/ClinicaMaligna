@@ -26,6 +26,7 @@ import controllers.*;
 
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import javax.swing.JLabel;
 
 
 
@@ -80,6 +81,8 @@ public class JanelaPrincipal extends JFrame{
 		//montando paineis
 		pnlBotoes.setLayout (flwBotoes);
 		cntForm.add (pnlBotoes,  BorderLayout.NORTH);
+		
+		
 		areaStates.setBackground(new Color(255, 0, 0));
 		cntForm.add (areaStates,  BorderLayout.CENTER);
 		

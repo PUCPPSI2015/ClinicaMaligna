@@ -46,7 +46,6 @@ public class States {
 	
 	
 	public void go(String nome_){
-		System.out.println("Indo para " + nome_);
 		states.get(nome_).montar(); 
 		this.layout.show(janela.getAreaStates(), nome_);
 		

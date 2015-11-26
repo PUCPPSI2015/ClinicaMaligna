@@ -26,8 +26,6 @@ public abstract class State {
 	
 	protected void montar(){
 		ativo = true;
-
-		System.out.println("Chegou aqui");
 	}
 	protected void desmontar(){
 		ativo  = false;
