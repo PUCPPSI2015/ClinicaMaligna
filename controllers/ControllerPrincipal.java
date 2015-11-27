@@ -59,8 +59,8 @@ public class ControllerPrincipal {
 			id = id_;
 			logado = true;
 			janela.definirLogado();
-			states.go("funcionarios administrativos");
-			//states.go("inicio");
+		
+			states.go("inicio");
 	}
 	public static void deslogar(){
 			id = "";

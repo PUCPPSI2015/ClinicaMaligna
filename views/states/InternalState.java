@@ -92,8 +92,7 @@ public class InternalState extends State{
 		resultPan.setLayout(new BorderLayout(0, 0));
 		
 		//splitpan
-		splResultados.setResizeWeight(.9d);
-		splResultados.setEnabled( false );
+		splResultados.setResizeWeight(.6d);
 		splResultados.setBorder(BorderFactory.createEmptyBorder());
 		
 		//esquerda
@@ -144,7 +143,7 @@ public class InternalState extends State{
 	//preenchendo lista de resultados
 	@SuppressWarnings("unchecked")
 	public void preencherLista(Object[] dados){
-		System.out.println("Fucnadmin: " + dados[0]);
+		
 		lstResults.setListData(dados);
 	}
 	//renderizador da lista de resultados

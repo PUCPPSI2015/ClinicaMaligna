@@ -19,6 +19,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -30,9 +32,9 @@ import model.Cargos.Cargo;
 public class StateFuncAdmin extends InternalState{
 	
 	//criando botoes
-	private JButton btnAll = new JButton("Ver todos");
+
 	private JButton btnAdd = new JButton("Adicionar novo");
-	private JButton btnFind = new JButton("Pesquisar");
+
 	
 	//criando campo pesquisa
 	private JTextField txtFind = new JTextField(52);
@@ -50,10 +52,12 @@ public class StateFuncAdmin extends InternalState{
 		
 
 		//montar botoes
-		taskPanItems.add(btnAll);
-		taskPanItems.add(btnAdd);
+		
+		btnAdd.addActionListener(ControllerFuncAdmin.btnAdicionar(this));
 		taskPanItems.add(txtFind);
-		taskPanItems.add(btnFind);
+		taskPanItems.add(btnAdd);
+
+		StateFuncAdmin eu = this;
 		
 		preencherLista(ControllerFuncAdmin.getAll());
 		
@@ -63,6 +67,21 @@ public class StateFuncAdmin extends InternalState{
 		
 		//lista de resultados
 		lstResults.addListSelectionListener(ControllerFuncAdmin.mudouLista(this));
+		
+		//puvir mudnaca valor pesquisa
+		txtFind.getDocument().addDocumentListener(new DocumentListener() {
+			  public void changedUpdate(DocumentEvent e) {
+				  ControllerFuncAdmin.pesquisarFunc(eu);
+			  }
+			  public void removeUpdate(DocumentEvent e) {
+				  ControllerFuncAdmin.pesquisarFunc(eu);
+			  }
+			  public void insertUpdate(DocumentEvent e) {
+				  ControllerFuncAdmin.pesquisarFunc(eu);
+			  }
+
+			  
+			});
 	}
 	public void criarFriedman(){
 
@@ -90,30 +109,28 @@ public class StateFuncAdmin extends InternalState{
 		
 		txtdfsd = new JTextField();
 		txtdfsd.setBounds(84, 95, 86, 34);
-		txtdfsd.setEditable(false);
-		txtdfsd.setText("25dfsd22");
+
+
 		txtdfsd.setColumns(10);
 		
 		btnGerarNovaSenha = new JButton("Gerar nova senha");
 		btnGerarNovaSenha.setBounds(176, 97, 119, 31);
+		btnGerarNovaSenha.addActionListener(ControllerFuncAdmin.btnNovaSenha(this));
 		
 		txtLogin = new JTextField();
 		txtLogin.setBounds(84, 137, 86, 34);
 		txtLogin.setEditable(false);
 		txtLogin.setHorizontalAlignment(SwingConstants.CENTER);
-		txtLogin.setText("256");
 		txtLogin.setColumns(10);
 		
 		btnSalvar = new JButton("Salvar");
 		btnSalvar.setBounds(10, 205, 110, 40);
+		btnSalvar.addActionListener(ControllerFuncAdmin.btnSalvar(this));
 		
 		btnExcluir = new JButton("Excluir");
 		btnExcluir.setBounds(130, 205, 110, 40);
 		btnExcluir.setForeground(Color.RED);
-		btnExcluir.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			}
-		});
+		btnExcluir.addActionListener(ControllerFuncAdmin.btnExcluir(this));
 		
 		pnlEditorMeu.setLayout(null);
 		pnlEditorMeu.add(lblLogin);
@@ -139,9 +156,28 @@ public class StateFuncAdmin extends InternalState{
 		pnlEditorMeu.setVisible(true);
 	}
 	public void updateFriedman(){
-		//pnlEditorMeu.setVisible(false);
+		pnlEditorMeu.setVisible(false);
 	}
 	
+	//getters e setters para fridman
+	public void setSenha(String s){
+		txtdfsd.setText(s);
+	}
+	public int getId(){
+		return Integer.parseInt(txtLogin.getText());
+	}
+	public String getNome(){
+		return txtNome.getText();
+	}
+	public int getCargo(){
+		return ((Cargo) comboBox.getSelectedItem()).getId();
+	}
+	public String getSenha(){
+		return txtdfsd.getText();
+	}
+	public String getPesquisa(){
+		return txtFind.getText();
+	}
 	
 	
 	

@@ -32,7 +32,6 @@ public class Cargos extends Model{
 	public static int getCargoIndex(int id){
 		int i = 0;
 		for (int key: cargos.keySet()) {
-			System.out.println("i:" + i + " key:" + key + " id:" + id);
 			if(key == id) return i;
 			i++;
 		}
@@ -44,7 +43,6 @@ public class Cargos extends Model{
 		int i = 0;
 		for (int key: cargos.keySet()) {
 			retorno[i] = new Cargo(key, cargos.get(key));
-			System.out.println("gravando i:" + i + " key:" + key);
 			i++;
 		}
 		return retorno;
@@ -60,6 +58,9 @@ public class Cargos extends Model{
 		}
 		public String toString(){
 			return this.nome;
+		}
+		public int getId(){
+			return this.id;
 		}
 	}
 }

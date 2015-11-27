@@ -1,37 +1,28 @@
 package controllers;
 
-
-import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.JList;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import views.AdicionarJanelaFunc;
-import views.states.StateFuncAdmin;
-import model.Cargos;
-import model.FuncAdminModel;
-import model.LoginModel;
-import model.dbos.FuncAdmin;
-import model.dbos.Acesso;
+import model.ProfSaudeModel;
+import model.dbos.ProfSaude;
+import views.AdicionarJanelaProf;
+import views.states.StateProfSaude;
 
-public class ControllerFuncAdmin {
+public class ControllerProfSaude {
 	private static Random rand;
-	
-	public static FuncAdmin[] getAll(){
-		return  FuncAdminModel.getAll();
+	public static ProfSaude[] getAll(){
+		return  ProfSaudeModel.getAll();
 	}
-	
-	public static void updateFriedman(StateFuncAdmin state, FuncAdmin ocara){
-		LoginModel.listaRefresh();
-		Acesso acessoDoCara = LoginModel.getAcesso(ocara.getId());
+	public static void updateFriedman(StateProfSaude state, ProfSaude ocara){
+
 		
 		
-		state.updateFriedman(ocara.getNome(), ocara.getCargo(), acessoDoCara.getSenha(), ocara.getId());
+		state.updateFriedman();
 	}
 	private static char[] alphanumeric(){
         StringBuffer buf=new StringBuffer(128);
@@ -51,36 +42,31 @@ public class ControllerFuncAdmin {
         }
         return out.toString();
 	}
-	public static ListSelectionListener mudouLista(StateFuncAdmin state){
+	public static ListSelectionListener mudouLista(StateProfSaude state){
 		return new ListSelectionListener() {
 		      public void valueChanged(ListSelectionEvent listSelectionEvent) {
-
-			        
-		          JList<FuncAdmin> list = (JList) listSelectionEvent.getSource();
+		          JList<ProfSaude> list = (JList) listSelectionEvent.getSource();
 		          int selections[] = list.getSelectedIndices();
-		          java.util.List<FuncAdmin> selectionValues = list.getSelectedValuesList();
+		          java.util.List<ProfSaude> selectionValues = list.getSelectedValuesList();
 		          int sel = -1;
 		          for (int i = 0, n = selections.length; i < n; i++) {
 		        	sel = selectionValues.get(i).getId();
 		            
 		          }
 		          if(sel == -1) return;
-		          updateFriedman(state, FuncAdminModel.getOne(sel));
-
+		          updateFriedman(state, ProfSaudeModel.getOne(sel));
 		        }
-		      
-
 		};
 	}
-	
-	
 	//ouvir botoes
-	public static ActionListener btnNovaSenha(StateFuncAdmin state){
+	public static ActionListener btnNovaSenha(StateProfSaude state){
+		
+
 		return new NovaSenhaAction(state);
 	}
 	private static class NovaSenhaAction implements ActionListener{
-		private StateFuncAdmin s;
-		public NovaSenhaAction(StateFuncAdmin state){
+		private StateProfSaude s;
+		public NovaSenhaAction(StateProfSaude state){
 			super();
 			this.s = state; 
 		}
@@ -88,15 +74,16 @@ public class ControllerFuncAdmin {
 		public void actionPerformed(ActionEvent e) {
 			this.s.setSenha(novaSenha(4));
 			
-		}
-		
+		}	
 	}
-	public static ActionListener btnNovaSenhaJanela(AdicionarJanelaFunc janela){
+	public static ActionListener btnNovaSenhaJanela(AdicionarJanelaProf janela){
+
+
 		return new NovaSenhaJanelaAction(janela);
 	}
 	private static class NovaSenhaJanelaAction implements ActionListener{
-		private AdicionarJanelaFunc j;
-		public NovaSenhaJanelaAction(AdicionarJanelaFunc janela){
+		private AdicionarJanelaProf j;
+		public NovaSenhaJanelaAction(AdicionarJanelaProf janela){
 			super();
 			this.j = janela; 
 		}
@@ -107,69 +94,69 @@ public class ControllerFuncAdmin {
 		}
 		
 	}
-	public static ActionListener btnSalvar(StateFuncAdmin state){
+	public static ActionListener btnSalvar(StateProfSaude state){
 		return new SalvarAction(state);
 	}
 	private static class SalvarAction implements ActionListener{
-		private StateFuncAdmin s;
-		public SalvarAction(StateFuncAdmin state){
+		private StateProfSaude s;
+		public SalvarAction(StateProfSaude state){
 			super();
 			this.s = state; 
 		}
 		
 		public void actionPerformed(ActionEvent e) {
-			FuncAdminModel.updateFun(this.s.getId(), this.s.getNome(), this.s.getCargo(), this.s.getSenha());
+			ProfSaudeModel.updateProf();
 			this.s.preencherLista(getAll());
 			this.s.updateFriedman();
 		}
 		
 	}
-	public static ActionListener btnExcluir(StateFuncAdmin state){
+	public static ActionListener btnExcluir(StateProfSaude state){
 		return new Excluir(state);
 	}
 	private static class Excluir implements ActionListener{
-		private StateFuncAdmin s;
-		public Excluir(StateFuncAdmin state){
+		private StateProfSaude s;
+		public Excluir(StateProfSaude state){
 			super();
 			this.s = state; 
 		}
 		
 		public void actionPerformed(ActionEvent e) {
-			FuncAdminModel.deletaFun(this.s.getId());
+			ProfSaudeModel.deletaProf(this.s.getId());
 			this.s.preencherLista(getAll());
 		}
 		
 	}
-	public static ActionListener btnAdicionar(StateFuncAdmin state){
-		return new AdicionarFunc(state);
+	public static ActionListener btnAdicionar(StateProfSaude state){
+		return new AdicionarProf(state);
 	}
-	private static class AdicionarFunc implements ActionListener{
-		private StateFuncAdmin s;
-		public AdicionarFunc(StateFuncAdmin state){
+	private static class AdicionarProf implements ActionListener{
+		private StateProfSaude s;
+		public AdicionarProf(StateProfSaude state){
 			super();
 			this.s = state; 
 		}
 		
 		public void actionPerformed(ActionEvent e) {
-			new AdicionarJanelaFunc(this.s);
+			new AdicionarJanelaProf(this.s);
 			
 		}
 		
 	}
-	public static ActionListener btnSalvarNovo(AdicionarJanelaFunc janela, StateFuncAdmin state){
+	public static ActionListener btnSalvarNovo(AdicionarJanelaProf janela, StateProfSaude state){
 		return new SalvarNovoAction(janela, state);
 	}
 	private static class SalvarNovoAction implements ActionListener{
-		private AdicionarJanelaFunc j;
-		private StateFuncAdmin s;
-		public SalvarNovoAction(AdicionarJanelaFunc janela, StateFuncAdmin state){
+		private AdicionarJanelaProf j;
+		private StateProfSaude s;
+		public SalvarNovoAction(AdicionarJanelaProf janela, StateProfSaude state){
 			super();
 			this.s = state; 
 			this.j = janela; 
 		}
 		
 		public void actionPerformed(ActionEvent e) {
-			FuncAdminModel.insertFunc(this.j.getNome(), this.j.getCargo(), this.j.getSenha());
+			ProfSaudeModel.insertProf();
 			this.s.preencherLista(getAll());
 			this.s.updateFriedman();
 			this.j.setVisible(false); 
@@ -179,8 +166,7 @@ public class ControllerFuncAdmin {
 	}
 	
 
-	public static void pesquisarFunc(StateFuncAdmin s){
-		s.preencherLista(FuncAdminModel.getPesquisa(s.getPesquisa()));
+	public static void pesquisarProf(StateProfSaude s){
+		s.preencherLista(ProfSaudeModel.getPesquisa(s.getPesquisa()));
 	}
-
 }
