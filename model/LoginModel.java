@@ -12,6 +12,19 @@ import model.dbos.Acesso;
 public class LoginModel extends Model{
 	private static ArrayList<Acesso> acessos = new ArrayList<Acesso>();
 	
+	//helper para ver se string é int
+	private static boolean isInteger(String s) {
+	    try { 
+	        Integer.parseInt(s); 
+	    } catch(NumberFormatException e) { 
+	        return false; 
+	    } catch(NullPointerException e) {
+	        return false;
+	    }
+	    // only got here if we didn't return false
+	    return true;
+	}
+	
 	public static Acesso login(String login, char[] senha_) {
 		Acesso achado;
 		String senha = new String(senha_);
@@ -32,16 +45,16 @@ public class LoginModel extends Model{
 		return null;
 		
 	}
-	public static Acesso getAcesso(int id){
+
+	public static Acesso getAcesso(String id){
 		for(int i = 0; i < acessos.size(); i++){
 			Acesso este = acessos.get(i);
-			if(Integer.parseInt(este.getLogin()) == id){
+			if(este.getLogin().equals(id) ){
 				return este;
 			}
 		}
 		return null;
 	}
-	
 	public static void listaRefresh() {
 		
 		acessos.clear();

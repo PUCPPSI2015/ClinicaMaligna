@@ -2,7 +2,10 @@ package model;
 
 import java.sql.*;
 
-import javax.swing.JOptionPane;
+
+import model.harddata.Cargos;
+import model.harddata.Especialidades;
+import model.harddata.Profissoes;
 
 public class Conexao {
 	
@@ -42,6 +45,8 @@ public class Conexao {
 			con = DriverManager.getConnection(DBURL, DBUSER, DBPASS);
 			//preencher hard datas
 			Cargos.preencher();
+			Profissoes.preencher();
+			Especialidades.preencher();
 		} catch (SQLException e) {
 			System.out.println("Deu xabu na conexao");
 		}	

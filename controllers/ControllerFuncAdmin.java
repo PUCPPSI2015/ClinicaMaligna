@@ -13,11 +13,11 @@ import javax.swing.event.ListSelectionListener;
 
 import views.AdicionarJanelaFunc;
 import views.states.StateFuncAdmin;
-import model.Cargos;
 import model.FuncAdminModel;
 import model.LoginModel;
 import model.dbos.FuncAdmin;
 import model.dbos.Acesso;
+import model.harddata.Cargos;
 
 public class ControllerFuncAdmin {
 	private static Random rand;
@@ -28,10 +28,10 @@ public class ControllerFuncAdmin {
 	
 	public static void updateFriedman(StateFuncAdmin state, FuncAdmin ocara){
 		LoginModel.listaRefresh();
-		Acesso acessoDoCara = LoginModel.getAcesso(ocara.getId());
+		Acesso acessoDoCara = LoginModel.getAcesso(ocara.getId() + "");
 		
 		
-		state.updateFriedman(ocara.getNome(), ocara.getCargo(), acessoDoCara.getSenha(), ocara.getId());
+		state.updateFriedman(ocara.getNome(), ocara.getCargo(), acessoDoCara.getSenha(), acessoDoCara.getLogin());
 	}
 	private static char[] alphanumeric(){
         StringBuffer buf=new StringBuffer(128);

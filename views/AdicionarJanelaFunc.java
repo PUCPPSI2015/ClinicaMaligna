@@ -7,11 +7,12 @@ import java.awt.Dimension;
 
 
 
+
 import javax.swing.*;
 
 import views.states.StateFuncAdmin;
-import model.Cargos;
-import model.Cargos.Cargo;
+import model.harddata.Cargos;
+import model.harddata.Cargos.Cargo;
 import controllers.ControllerFuncAdmin;
 
 public class AdicionarJanelaFunc extends JFrame{

@@ -42,8 +42,8 @@ public class ControllerPrincipal {
 		SwingUtilities.invokeLater(new Runnable() {
             public void run() {
             	janela.setVisible(true);
-            	logar("123456");
         		//deslogar();
+            	logar("teste");
             }
         });
 
@@ -59,8 +59,9 @@ public class ControllerPrincipal {
 			id = id_;
 			logado = true;
 			janela.definirLogado();
-		
-			states.go("inicio");
+			janela.setTitle("Bem vindo: " + id_);
+			//states.go("inicio");
+			states.go("profissionais saude");
 	}
 	public static void deslogar(){
 			id = "";

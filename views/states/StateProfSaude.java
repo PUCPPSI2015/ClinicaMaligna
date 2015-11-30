@@ -4,11 +4,13 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.util.Date;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.JTree;
@@ -16,19 +18,25 @@ import javax.swing.SpinnerDateModel;
 import javax.swing.SwingConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
 
 import controllers.ControllerProfSaude;
-import model.Cargos;
-import model.Cargos.Cargo;
+import model.harddata.Cargos;
+import model.harddata.Cargos.Cargo;
 import views.JanelaPrincipal;
 
 public class StateProfSaude extends InternalState{
 	
+	//criando campo pesquisa
+	private JTextField txtFind = new JTextField(52);
+	
 	//criando botoes
 	private JButton btnAdd = new JButton("Adicionar novo");
 		
-	//criando campo pesquisa
-	private JTextField txtFind = new JTextField(52);
+	private static String cpf;
 	
 	//meus elementos do friedman
 	private static JPanel pnlEditorMeu = new JPanel();
@@ -36,10 +44,12 @@ public class StateProfSaude extends InternalState{
 	private static JTextField 	txtNome = new JTextField(),
 								txtdfsd = new JTextField(),
 								txtLogin = new JTextField(),
-								txtCpf = new JTextField();
+								txtCpf = new JTextField(),
+								txtIdClasse = new JTextField();
 
 	private static JLabel 	lblNome = new JLabel("Nome"),
 							lblCPF = new JLabel("CPF"),
+							lblIdClasse = new JLabel("Id da Classe(CRM, CRO...)"),
 							lblSenha = new JLabel("Senha"),
 							lblLogin = new JLabel("Login"),
 							lblDisponibilidades = new JLabel("Disponibilidades"),
@@ -73,7 +83,9 @@ public class StateProfSaude extends InternalState{
 							tmOutDom = new MeuSpiner(),
 							tmInDom = new MeuSpiner();
 
-	private static JTree treEspecializacoes = new JTree();
+	private static JTree treEspecializacoes = ControllerProfSaude.montarArvore();
+	private static JScrollPane scrEsp = new JScrollPane(treEspecializacoes);
+	
 		
 	
 	protected StateProfSaude(JanelaPrincipal janela_) {
@@ -83,8 +95,9 @@ public class StateProfSaude extends InternalState{
 		
 		//montar botoes
 		btnAdd.addActionListener(ControllerProfSaude.btnAdicionar(this));
-		taskPanItems.add(btnAdd);
 		taskPanItems.add(txtFind);
+		taskPanItems.add(btnAdd);
+		
 		
 		StateProfSaude eu = this;
 		
@@ -137,7 +150,15 @@ public class StateProfSaude extends InternalState{
 				txtCpf.setColumns(10);
 				txtCpf.setBounds(84, 41, 170, 23);
 				pnlEditorMeu.add(txtCpf);
-
+				
+				
+				//idclasse
+				lblIdClasse.setBounds(285, 21, 168, 14);
+				pnlEditorMeu.add(lblIdClasse);
+				
+				txtIdClasse.setColumns(10);
+				txtIdClasse.setBounds(285, 41, 170, 23);
+				pnlEditorMeu.add(txtIdClasse);
 				
 
 				//senha
@@ -169,8 +190,10 @@ public class StateProfSaude extends InternalState{
 				lblEspecializacoes.setBounds(10, 153, 91, 14);
 				pnlEditorMeu.add(lblEspecializacoes);
 
-				treEspecializacoes.setBounds(94, 152, 204, 128);
-				pnlEditorMeu.add(treEspecializacoes);
+				scrEsp.setBounds(94, 152, 354, 128);
+				treEspecializacoes.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+				
+				pnlEditorMeu.add(scrEsp);
 
 
 
@@ -268,13 +291,18 @@ public class StateProfSaude extends InternalState{
 				
 		//painel
 		pnlEditorMeu.setLayout(null);
+		pnlEditorMor.add(pnlEditorMeu);
+		
+		
 
 	}
-	public void updateFriedman(String nome, int cargo, String senha, int Id){
+	public void updateFriedman(String nome, int cpf, String senha, int id, String idClasse){
 		txtNome.setText(nome);
+		this.setCpf("" + cpf);
+		txtCpf.setText("" + cpf);
 		txtdfsd.setText(senha);
-		txtLogin.setText("" + Id);
-		System.out.println("Eu quero: " + cargo + " Achei no: " + Cargos.getCargoIndex(cargo));
+		txtLogin.setText("" + id);
+		txtIdClasse.setText(idClasse);
 		pnlEditorMeu.setVisible(true);
 	}
 	public void updateFriedman(){}
@@ -282,20 +310,34 @@ public class StateProfSaude extends InternalState{
 	public void setSenha(String s){
 		txtdfsd.setText(s);
 	}
+	private void setCpf(String s){
+		cpf = s;
+	}
+	public String getCpfA(){
+		return cpf;
+	}
 	public int getId(){
 		return Integer.parseInt(txtLogin.getText());
 	}
 	public String getNome(){
 		return txtNome.getText();
 	}
-
+	public JTree getTree(){
+		return this.treEspecializacoes;
+	}
 	public String getSenha(){
 		return txtdfsd.getText();
+	}
+	public String getCpf(){
+		return txtCpf.getText();
 	}
 	public String getPesquisa(){
 		return txtFind.getText();
 	}
-	private static class MeuSpiner extends JSpinner{
+	public String getIdClasse(){
+		return txtIdClasse.getText();
+	}
+	public static class MeuSpiner extends JSpinner{
 		private JSpinner.DateEditor timedin;
 		public MeuSpiner(){
 			super(new SpinnerDateModel());
@@ -304,6 +346,23 @@ public class StateProfSaude extends InternalState{
 			this.setValue(new Date(0, 0, 0));
 		}
 
+	}
+	
+	
+	
+	public class TreeHandler implements TreeSelectionListener {
+		public void valueChanged(TreeSelectionEvent e) {
+			TreePath path = e.getPath();
+			String text = path.getPathComponent(path.getPathCount() - 1)
+					.toString();
+			if (path.getPathCount() > 3) {
+				text += ": ";
+				text += Integer.toString((int) (Math.random() * 50)) + " Wins ";
+				text += Integer.toString((int) (Math.random() * 50))
+						+ " Losses";
+			}
+			txtdfsd.setText(text);
+		}
 	}
 
 }

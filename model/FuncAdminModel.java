@@ -87,7 +87,7 @@ public class FuncAdminModel extends Model{
 							"where Id=" + id + "",
 			   updeitaa = 	"update acesso " + 
 							"set Senha='" + senha + "' " + 
-							"where Id=" + id + "";
+							"where Login='" + id + "'";
 		
 		try {
 			myStm.executeUpdate(updeitaf);
@@ -103,7 +103,7 @@ public class FuncAdminModel extends Model{
 		String deletaf = 	"delete from funcionarios " +
 							"where Id=" + id + "",
 			   deletaa = 	"delete from acesso " + 
-							"where Id=" + id + "";
+							"where Login='" + id + "'";
 		
 		try {
 			myStm.executeUpdate(deletaf);

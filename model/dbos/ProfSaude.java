@@ -21,7 +21,11 @@ public class ProfSaude {
 	public String getNome(){
 		return this.Nome;
 	}
+	public String getIdClasse(){
+		return this.idClass;
+	}
 	public String toString(){
 		return this.Nome;
-	} 
+	}
+	
 }

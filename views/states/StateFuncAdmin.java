@@ -1,33 +1,21 @@
 package views.states;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
-import controllers.ControllerFuncAdmin;
+import model.harddata.Cargos;
+import model.harddata.Cargos.Cargo;
 import views.JanelaPrincipal;
-import model.*;
-import model.Cargos.Cargo;
+import controllers.ControllerFuncAdmin;
 
 public class StateFuncAdmin extends InternalState{
 	
@@ -147,10 +135,10 @@ public class StateFuncAdmin extends InternalState{
 		pnlEditorMor.add(pnlEditorMeu);
 
 	}
-	public void updateFriedman(String nome, int cargo, String senha, int Id){
+	public void updateFriedman(String nome, int cargo, String senha, String Id){
 		txtNome.setText(nome);
 		txtdfsd.setText(senha);
-		txtLogin.setText("" + Id);
+		txtLogin.setText(Id);
 		System.out.println("Eu quero: " + cargo + " Achei no: " + Cargos.getCargoIndex(cargo));
 		comboBox.setSelectedIndex(Cargos.getCargoIndex(cargo));
 		pnlEditorMeu.setVisible(true);

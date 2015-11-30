@@ -1,6 +1,6 @@
 package model.dbos;
 
-import model.Cargos;
+import model.harddata.Cargos;
 
 public class FuncAdmin {
 	private String nome;
@@ -19,6 +19,9 @@ public class FuncAdmin {
 	public int getId(){
 		return this.id;
 	}
+	public String getIdString(){
+		return "" + this.id;
+	}
 	public int getCargo(){
 		return this.cargo;
 	}
@@ -30,4 +33,5 @@ public class FuncAdmin {
 	public String toString(){
 		return this.nome + " - " + Cargos.get(this.cargo);
 	}
+	
 }

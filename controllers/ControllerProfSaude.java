@@ -5,11 +5,21 @@ import java.awt.event.ActionListener;
 import java.util.Random;
 
 import javax.swing.JList;
+import javax.swing.JTree;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeSelectionModel;
 
+import model.LoginModel;
 import model.ProfSaudeModel;
+import model.EspecializacoesModel;
+import model.dbos.Acesso;
 import model.dbos.ProfSaude;
+import model.harddata.Especialidades;
+import model.harddata.Profissoes;
+import model.harddata.Especialidades.Especialidade;
+import model.harddata.Profissoes.Profissao;
 import views.AdicionarJanelaProf;
 import views.states.StateProfSaude;
 
@@ -20,9 +30,20 @@ public class ControllerProfSaude {
 	}
 	public static void updateFriedman(StateProfSaude state, ProfSaude ocara){
 
+		int oid = ocara.getId();
+		LoginModel.listaRefresh();
+		Acesso acessoDoCara = LoginModel.getAcesso("m" + oid);
 		
 		
-		state.updateFriedman();
+		EspecializacoesModel.listaRefresh();
+		int[] especializacoes = EspecializacoesModel.getProfEsp(ocara.getId());
+		JTree arvore = state.getTree();
+		TreeSelectionModel sm = arvore.getSelectionModel();
+		;
+		
+		
+
+		state.updateFriedman(ocara.getNome(), ocara.getCpf(), acessoDoCara.getSenha(), ocara.getId(), ocara.getIdClasse());
 	}
 	private static char[] alphanumeric(){
         StringBuffer buf=new StringBuffer(128);
@@ -105,7 +126,7 @@ public class ControllerProfSaude {
 		}
 		
 		public void actionPerformed(ActionEvent e) {
-			ProfSaudeModel.updateProf();
+			ProfSaudeModel.updateProf(s.getId(), s.getNome(), s.getSenha(), s.getCpf(), s.getCpfA());
 			this.s.preencherLista(getAll());
 			this.s.updateFriedman();
 		}
@@ -122,7 +143,7 @@ public class ControllerProfSaude {
 		}
 		
 		public void actionPerformed(ActionEvent e) {
-			ProfSaudeModel.deletaProf(this.s.getId());
+			ProfSaudeModel.deletaProf(this.s.getId(), this.s.getCpfA());
 			this.s.preencherLista(getAll());
 		}
 		
@@ -156,7 +177,7 @@ public class ControllerProfSaude {
 		}
 		
 		public void actionPerformed(ActionEvent e) {
-			ProfSaudeModel.insertProf();
+			ProfSaudeModel.insertProf(this.j.getNome(), this.j.getCpf(), this.j.getSenha());
 			this.s.preencherLista(getAll());
 			this.s.updateFriedman();
 			this.j.setVisible(false); 
@@ -164,9 +185,27 @@ public class ControllerProfSaude {
 		}
 		
 	}
-	
 
 	public static void pesquisarProf(StateProfSaude s){
 		s.preencherLista(ProfSaudeModel.getPesquisa(s.getPesquisa()));
+	}
+	
+	//montar arvore
+	public static JTree montarArvore(){
+		//montar profissoes
+		Profissao[] tpf =  Profissoes.getAll();
+		DefaultMutableTreeNode root = new DefaultMutableTreeNode("");
+		for(int i = 0; i < tpf.length; i++){
+			DefaultMutableTreeNode profPasta = new DefaultMutableTreeNode(tpf[i]);
+			Especialidade[] msp = Especialidades.getThisProf(tpf[i].getId());
+			for(int j = 0; j < msp.length; j++){
+				profPasta.add(new DefaultMutableTreeNode(msp[j]));
+			}
+			root.add(profPasta);
+		}
+
+		
+		return new JTree(root);
+		 
 	}
 }
