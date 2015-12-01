@@ -6,8 +6,12 @@ import java.io.StringWriter;
 
 import javax.swing.JOptionPane;
 
+import model.FuncAdminModel;
 import model.LoginModel;
+import model.ProfSaudeModel;
 import model.dbos.Acesso;
+import model.dbos.FuncAdmin;
+import model.dbos.ProfSaude;
 import views.states.*;
 import views.*;
 
@@ -15,6 +19,18 @@ public class ControllerLogin extends ControllerState{
 	
 	protected static StateLogin este;
 	
+	//helper para ver se string é int
+		private static boolean isInteger(String s) {
+		    try { 
+		        Integer.parseInt(s); 
+		    } catch(NumberFormatException e) { 
+		        return false; 
+		    } catch(NullPointerException e) {
+		        return false;
+		    }
+		    // only got here if we didn't return false
+		    return true;
+		}
 	public static ActionListener loginAction(JanelaPrincipal janela_, StateLogin login){
 		este = login;
 		
@@ -57,7 +73,27 @@ public class ControllerLogin extends ControllerState{
 					if(resultado==null)
 						JOptionPane.showMessageDialog( janela, "Login e senha invalidos");
 					else{
-						ControllerPrincipal.logar(resultado.getLogin());
+						
+						//if is admin
+						if(isInteger(resultado.getLogin())){
+							FuncAdmin recuperado = FuncAdminModel.getOne(Integer.parseInt(resultado.getLogin()));
+							ControllerPrincipal.setAdmin(true);
+							ControllerPrincipal.logar(recuperado);
+						}
+						else{
+							char fc = resultado.getLogin().charAt(0);
+							String subs = resultado.getLogin().substring(1);
+							ControllerPrincipal.setAdmin(false);
+							if(fc == 'm'){ //eh acesso com o id de profsaude 
+								ProfSaude recuperado = ProfSaudeModel.getOne(Integer.parseInt(subs));
+								ControllerPrincipal.logar(recuperado);
+							}
+							else if(fc == 'c'){ //ou idclasse
+								ProfSaude recuperado = ProfSaudeModel.getOneByIdClasse(subs);
+								ControllerPrincipal.logar(recuperado);
+							}
+						}
+						
 					}
 					
 				} catch (Exception e) {

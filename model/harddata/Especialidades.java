@@ -33,6 +33,24 @@ public class Especialidades extends Model implements HardData{
 		}
 		return retorno;
 	}
+	public static Especialidade getOne(int id){
+		return especialidades.get(id);
+	}
+	public static Especialidade getOneByName(String nome){
+		for (int key: especialidades.keySet()) {
+			Especialidade esta = especialidades.get(key); 
+			if(esta.getNome().equals(nome))
+				return esta;
+		}
+		return null;
+	}
+	public static Especialidade[] getByArrayDeIds(int[] ids){
+		Especialidade[] retorno = new Especialidade[ids.length];
+		for(int i = 0; i < ids.length; i++){
+			retorno[i] = especialidades.get(ids[i]);
+		}
+		return retorno;
+	}
 	public static Especialidade[] getThisProf(int prof){
 		Map<Integer, Especialidade> estasEspecialidades = new HashMap<Integer, Especialidade>();
 		

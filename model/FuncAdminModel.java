@@ -41,6 +41,7 @@ public class FuncAdminModel extends Model{
 	}
 	
 	public static FuncAdmin getOne(int id){
+		listaRefreshAll();
 		for(int i = 0; i < funcionarios.size(); i++){
 			FuncAdmin este = funcionarios.get(i);
 			if(este.getId() == id){

@@ -24,6 +24,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
 import controllers.ControllerProfSaude;
+import controllers.ControllerProfSaude.ProfissaoArvore;
 import model.harddata.Cargos;
 import model.harddata.Cargos.Cargo;
 import views.JanelaPrincipal;
@@ -36,7 +37,7 @@ public class StateProfSaude extends InternalState{
 	//criando botoes
 	private JButton btnAdd = new JButton("Adicionar novo");
 		
-	private static String cpf;
+	private static String idClasseA;
 	
 	//meus elementos do friedman
 	private static JPanel pnlEditorMeu = new JPanel();
@@ -83,7 +84,7 @@ public class StateProfSaude extends InternalState{
 							tmOutDom = new MeuSpiner(),
 							tmInDom = new MeuSpiner();
 
-	private static JTree treEspecializacoes = ControllerProfSaude.montarArvore();
+	private static ProfissaoArvore treEspecializacoes = ControllerProfSaude.montarArvore();
 	private static JScrollPane scrEsp = new JScrollPane(treEspecializacoes);
 	
 		
@@ -127,12 +128,8 @@ public class StateProfSaude extends InternalState{
 	}
 	public void criarFriedman(){
 
-
-
 		pnlEditorMeu.setPreferredSize(new Dimension(300, 500));
 
-				
-		
 				//nome
 				lblNome.setBounds(10, 11, 27, 14);
 				lblNome.setHorizontalAlignment(SwingConstants.LEFT);
@@ -185,7 +182,6 @@ public class StateProfSaude extends InternalState{
 				txtLogin.setColumns(10);
 				pnlEditorMeu.add(txtLogin);
 				
-				
 				//especializacoes
 				lblEspecializacoes.setBounds(10, 153, 91, 14);
 				pnlEditorMeu.add(lblEspecializacoes);
@@ -194,8 +190,6 @@ public class StateProfSaude extends InternalState{
 				treEspecializacoes.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 				
 				pnlEditorMeu.add(scrEsp);
-
-
 
 				//disponibilidades
 				lblDisponibilidades.setBounds(10, 291, 91, 14);
@@ -251,7 +245,6 @@ public class StateProfSaude extends InternalState{
 					tmOutQui.setBounds(353, 376, 75, 23);
 					pnlEditorMeu.add(tmOutQui);
 
-
 					//sexta
 					chckbxSexta.setBounds(440, 312, 75, 23);
 					pnlEditorMeu.add(chckbxSexta);
@@ -273,8 +266,6 @@ public class StateProfSaude extends InternalState{
 					pnlEditorMeu.add(tmOutSab);
 
 
-	
-
 				//botoes
 				btnSalvar.setBounds(10, 417, 110, 40);
 				btnSalvar.addActionListener(ControllerProfSaude.btnSalvar(this));
@@ -286,19 +277,14 @@ public class StateProfSaude extends InternalState{
 				pnlEditorMeu.add(btnExcluir);
 
 				
-				
-
-				
 		//painel
 		pnlEditorMeu.setLayout(null);
 		pnlEditorMor.add(pnlEditorMeu);
 		
-		
-
 	}
 	public void updateFriedman(String nome, int cpf, String senha, int id, String idClasse){
 		txtNome.setText(nome);
-		this.setCpf("" + cpf);
+		this.setIdClasseA("" + idClasse);
 		txtCpf.setText("" + cpf);
 		txtdfsd.setText(senha);
 		txtLogin.setText("" + id);
@@ -310,20 +296,17 @@ public class StateProfSaude extends InternalState{
 	public void setSenha(String s){
 		txtdfsd.setText(s);
 	}
-	private void setCpf(String s){
-		cpf = s;
+	private void setIdClasseA(String s){
+		idClasseA = s;
 	}
-	public String getCpfA(){
-		return cpf;
+	public String getIdClasseA(){
+		return idClasseA;
 	}
 	public int getId(){
 		return Integer.parseInt(txtLogin.getText());
 	}
 	public String getNome(){
 		return txtNome.getText();
-	}
-	public JTree getTree(){
-		return this.treEspecializacoes;
 	}
 	public String getSenha(){
 		return txtdfsd.getText();
@@ -336,6 +319,9 @@ public class StateProfSaude extends InternalState{
 	}
 	public String getIdClasse(){
 		return txtIdClasse.getText();
+	}
+	public ProfissaoArvore getArvore(){
+		return this.treEspecializacoes;
 	}
 	public static class MeuSpiner extends JSpinner{
 		private JSpinner.DateEditor timedin;
@@ -350,19 +336,6 @@ public class StateProfSaude extends InternalState{
 	
 	
 	
-	public class TreeHandler implements TreeSelectionListener {
-		public void valueChanged(TreeSelectionEvent e) {
-			TreePath path = e.getPath();
-			String text = path.getPathComponent(path.getPathCount() - 1)
-					.toString();
-			if (path.getPathCount() > 3) {
-				text += ": ";
-				text += Integer.toString((int) (Math.random() * 50)) + " Wins ";
-				text += Integer.toString((int) (Math.random() * 50))
-						+ " Losses";
-			}
-			txtdfsd.setText(text);
-		}
-	}
+	
 
 }

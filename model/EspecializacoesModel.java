@@ -30,6 +30,7 @@ public class EspecializacoesModel extends Model{
 		}
 	}
 	public static int[] getProfEsp(int prof){
+		listaRefresh();
 		ArrayList<Especializacao> minhasEspecializacoes = new ArrayList<Especializacao>();
 		for (int key = 0; key < especializacoes.size(); key++ ) {
 			Especializacao esta = especializacoes.get(key); 

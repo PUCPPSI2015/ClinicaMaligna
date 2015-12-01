@@ -19,6 +19,7 @@ import javax.swing.JTree;
 import javax.swing.SwingConstants;
 
 import controllers.ControllerProfSaude;
+import controllers.ControllerProfSaude.ProfissaoArvore;
 import views.states.StateProfSaude;
 import views.states.StateProfSaude.MeuSpiner;
 
@@ -38,19 +39,18 @@ public class AdicionarJanelaProf  extends JFrame{
 
 		private static JTextField 	txtNome = new JTextField(),
 									txtdfsd = new JTextField(),
-									txtLogin = new JTextField(),
+									txtIdClasse = new JTextField(),
 									txtCpf = new JTextField();
 
 		private static JLabel 	lblNome = new JLabel("Nome"),
 								lblCPF = new JLabel("CPF"),
+								lblIdClasse = new JLabel("Id da Classe(CRM, CRO...)"),
 								lblSenha = new JLabel("Senha"),
-								lblLogin = new JLabel("Login"),
 								lblDisponibilidades = new JLabel("Disponibilidades"),
 								lblEspecializacoes = new JLabel("Especializacoes");
 
 		private static JButton 	btnGerarNovaSenha = new JButton("Gerar nova senha"),
-								btnSalvar = new JButton("Salvar"),
-								btnExcluir = new JButton("Excluir");
+								btnSalvar = new JButton("Salvar");
 		
 
 		private static JCheckBox chckbxDomingo = new JCheckBox("Domingo"),
@@ -76,7 +76,7 @@ public class AdicionarJanelaProf  extends JFrame{
 								tmOutDom = new MeuSpiner(),
 								tmInDom = new MeuSpiner();
 
-		private static JTree treEspecializacoes = ControllerProfSaude.montarArvore();
+		private static ProfissaoArvore treEspecializacoes = ControllerProfSaude.montarArvore();
 		private static JScrollPane scrEsp = new JScrollPane(treEspecializacoes);
 	private StateProfSaude s;
 	public AdicionarJanelaProf(StateProfSaude state){
@@ -97,6 +97,7 @@ public class AdicionarJanelaProf  extends JFrame{
 				lblNome.setHorizontalAlignment(SwingConstants.LEFT);
 				pnlEditorMeu.add(lblNome);
 				
+				txtNome.setText("");
 				txtNome.setBounds(84, 7, 168, 23);
 				txtNome.setColumns(10);
 				pnlEditorMeu.add(txtNome);
@@ -105,17 +106,26 @@ public class AdicionarJanelaProf  extends JFrame{
 				//cpf
 				lblCPF.setBounds(10, 45, 29, 14);
 				pnlEditorMeu.add(lblCPF);
-
+				
+				txtCpf.setText("");
 				txtCpf.setColumns(10);
 				txtCpf.setBounds(84, 41, 170, 23);
 				pnlEditorMeu.add(txtCpf);
 
+				//idclasse
+				lblIdClasse.setBounds(285, 21, 168, 14);
+				pnlEditorMeu.add(lblIdClasse);
 				
+				txtIdClasse.setText("");
+				txtIdClasse.setColumns(10);
+				txtIdClasse.setBounds(285, 41, 170, 23);
+				pnlEditorMeu.add(txtIdClasse);
 
 				//senha
 				lblSenha.setBounds(10, 77, 30, 14);
 				pnlEditorMeu.add(lblSenha);
-
+				
+				txtdfsd.setText("");
 				txtdfsd.setBounds(84, 73, 86, 23);
 				txtdfsd.setColumns(10);
 				pnlEditorMeu.add(txtdfsd);
@@ -126,16 +136,6 @@ public class AdicionarJanelaProf  extends JFrame{
 
 
 
-				//login
-				lblLogin.setBounds(10, 112, 25, 14);
-				pnlEditorMeu.add(lblLogin);
-
-				txtLogin.setBounds(84, 108, 86, 23);
-				txtLogin.setEditable(false);
-				txtLogin.setHorizontalAlignment(SwingConstants.CENTER);
-				txtLogin.setColumns(10);
-				pnlEditorMeu.add(txtLogin);
-				
 				
 				//especializacoes
 				lblEspecializacoes.setBounds(10, 153, 91, 14);
@@ -231,10 +231,7 @@ public class AdicionarJanelaProf  extends JFrame{
 				btnSalvar.addActionListener(ControllerProfSaude.btnSalvarNovo(this,s));
 				pnlEditorMeu.add(btnSalvar);
 
-				btnExcluir.setBounds(130, 417, 110, 40);
-				btnExcluir.setForeground(Color.RED);
-				btnExcluir.addActionListener(ControllerProfSaude.btnExcluir(s));
-				pnlEditorMeu.add(btnExcluir);
+
 
 				
 				
@@ -258,6 +255,12 @@ public class AdicionarJanelaProf  extends JFrame{
 	}
 	public String getCpf(){
 		return txtCpf.getText();
+	}
+	public String getIdClasse(){
+		return txtIdClasse.getText();
+	}
+	public ProfissaoArvore getArvore(){
+		return this.treEspecializacoes;
 	}
 }
 

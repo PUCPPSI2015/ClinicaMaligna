@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 
 
+
 import model.dbos.Acesso;
 
 public class LoginModel extends Model{
@@ -35,10 +36,24 @@ public class LoginModel extends Model{
 		//procurar na lista
 		for(int i = 0; i < acessos.size(); i++){
 			Acesso este = acessos.get(i);
-			if( (este.getLogin().equals(login)) && (este.getSenha().equals(senha)) ){
-				System.out.println("achamos  " + este.getSenha() );
-				return este;
+			if(isInteger(este.getLogin())){ //é funcadmin
+				if( (este.getLogin().equals(login)) && (este.getSenha().equals(senha)) ){
+					return este;
+				}
+			}else{ //é prf saude
+				char fc = este.getLogin().charAt(0);
+				
+				if((fc == 'm')||(fc == 'c')){ //eh acesso com o id de profsaude ou idclasse
+					String subs = este.getLogin().substring(1);
+					if( (subs.equals(login)) && (este.getSenha().equals(senha)) ){
+						System.out.println(este.getLogin());
+						return este;
+					}
+				}
+				
+				
 			}
+			
 			
 		}
 		

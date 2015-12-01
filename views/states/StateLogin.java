@@ -112,7 +112,9 @@ public class StateLogin extends State{
 	}
 	
 	public char[] getSenha(){
-		return pswSenha.getPassword();
+		char[] coisinha = pswSenha.getPassword();
+		pswSenha.setText("");
+		return coisinha;
 	}
 	public String getId(){
 		return txtId.getText();

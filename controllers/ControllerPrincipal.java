@@ -22,6 +22,8 @@ public class ControllerPrincipal {
 	private static boolean logado = true; 
 	private static String id;
 	private static States states; 
+	private static boolean admin = false;
+	private static Object objLogado;
 	
 	
 	private static JanelaPrincipal janela = new JanelaPrincipal();
@@ -55,11 +57,11 @@ public class ControllerPrincipal {
 	/*
 	 * metodos de logon e logoff
 	 * */
-	public static void logar(String id_){
-			id = id_;
+	public static void logar(Object id_){
+			objLogado = id_;
 			logado = true;
 			janela.definirLogado();
-			janela.setTitle("Bem vindo: " + id_);
+			janela.setTitle("Bem vindo: " + objLogado.toString());
 			//states.go("inicio");
 			states.go("profissionais saude");
 	}
@@ -72,7 +74,13 @@ public class ControllerPrincipal {
 	}
 	public static boolean isLogado(){
 		return logado;
+	}
+	public static void setAdmin(boolean q){
+		admin = q;
 	} 
+	private boolean isAdmin(){
+		return admin;
+	}
 	
 	/*
 	 * munca de states
