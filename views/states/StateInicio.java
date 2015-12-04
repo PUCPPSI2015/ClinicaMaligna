@@ -72,7 +72,7 @@ public class StateInicio extends State{
 		
 		btnFuncAdmin.addActionListener(ControllerPrincipal.mudador("funcionarios administrativos"));
 		btnProfSaude.addActionListener(ControllerPrincipal.mudador("profissionais saude"));
-		
+		btnAgConsultas.addActionListener(ControllerPrincipal.mudador("agendamento"));
 		
 		
 		//montar 

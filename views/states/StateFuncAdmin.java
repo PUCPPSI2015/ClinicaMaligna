@@ -139,7 +139,6 @@ public class StateFuncAdmin extends InternalState{
 		txtNome.setText(nome);
 		txtdfsd.setText(senha);
 		txtLogin.setText(Id);
-		System.out.println("Eu quero: " + cargo + " Achei no: " + Cargos.getCargoIndex(cargo));
 		comboBox.setSelectedIndex(Cargos.getCargoIndex(cargo));
 		pnlEditorMeu.setVisible(true);
 	}

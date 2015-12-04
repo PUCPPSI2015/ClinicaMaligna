@@ -32,7 +32,7 @@ public class States {
 		adicionarState("inicio", new StateInicio(this.janela));
 		adicionarState("funcionarios administrativos", new StateFuncAdmin(this.janela));
 		adicionarState("profissionais saude", new StateProfSaude(this.janela));
-		//adicionarState("profissionais agenda", new StateAgenda(this.janela));
+		adicionarState("agendamento", new StateAgendamento(this.janela));
 		
 		
 		

@@ -4,6 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -18,7 +22,10 @@ import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.SwingConstants;
 
+import model.DisponibilidadesModel.Disponibilidade;
+import model.harddata.Especialidades.Especialidade;
 import controllers.ControllerProfSaude;
+import controllers.ControllerProfSaude.MeuJCombo;
 import controllers.ControllerProfSaude.ProfissaoArvore;
 import views.states.StateProfSaude;
 import views.states.StateProfSaude.MeuSpiner;
@@ -61,7 +68,7 @@ public class AdicionarJanelaProf  extends JFrame{
 								 chckbxQuinta = new JCheckBox("Quinta"),
 								 chckbxSbado = new JCheckBox("S\u00E1bado");
 
-		private static JSpinner tmOutTer = new MeuSpiner(),
+		private static MeuSpiner tmOutTer = new MeuSpiner(),
 								tmInTer = new MeuSpiner(),
 								tmOutQua = new MeuSpiner(),
 								tmInQua = new MeuSpiner(),
@@ -75,11 +82,15 @@ public class AdicionarJanelaProf  extends JFrame{
 								tmInSab = new MeuSpiner(),
 								tmOutDom = new MeuSpiner(),
 								tmInDom = new MeuSpiner();
+		
+		private static SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
+
+
 
 		private static ProfissaoArvore treEspecializacoes = ControllerProfSaude.montarArvore();
 		private static JScrollPane scrEsp = new JScrollPane(treEspecializacoes);
-	private StateProfSaude s;
-	public AdicionarJanelaProf(StateProfSaude state){
+		private StateProfSaude s;
+		public AdicionarJanelaProf(StateProfSaude state){
 		super("Adicionar funcionario Administrativo");
 		this.s = state; 
 		this.setSize(650,500);
@@ -152,82 +163,114 @@ public class AdicionarJanelaProf  extends JFrame{
 				lblDisponibilidades.setBounds(10, 291, 91, 14);
 				pnlEditorMeu.add(lblDisponibilidades);
 
-					//domingo
-					chckbxDomingo.setBounds(10, 312, 75, 23);
-					pnlEditorMeu.add(chckbxDomingo);
+							//domingo
+							chckbxDomingo.setBounds(10, 312, 75, 23);
+							chckbxDomingo.addItemListener(ControllerProfSaude.checkDiasSemana(this,chckbxDomingo, tmInDom, tmOutDom));
+							pnlEditorMeu.add(chckbxDomingo);
+			
+							tmInDom.setBounds(10, 342, 75, 23);
+							pnlEditorMeu.add(tmInDom);
+			
+							tmOutDom.setBounds(10, 376, 75, 23);
+							pnlEditorMeu.add(tmOutDom);
+			
+							tmInDom.setEnabled(chckbxDomingo.isSelected());
+							tmOutDom.setEnabled(chckbxDomingo.isSelected());
+			
 
-					tmInDom.setBounds(10, 342, 75, 23);
-					pnlEditorMeu.add(tmInDom);
+							//segunda
+							chckbxSegunda.setBounds(94, 312, 75, 23);
+							chckbxSegunda.addItemListener(ControllerProfSaude.checkDiasSemana(this,chckbxSegunda, tmInSeg, tmOutSeg));
+							pnlEditorMeu.add(chckbxSegunda);
+			
+							tmInSeg.setBounds(94, 342, 75, 23);
+							pnlEditorMeu.add(tmInSeg);
+			
+							tmOutSeg.setBounds(94, 376, 75, 23);
+							pnlEditorMeu.add(tmOutSeg);
+			
+							tmInSeg.setEnabled(chckbxSegunda.isSelected());
+							tmOutSeg.setEnabled(chckbxSegunda.isSelected());
 
-					tmOutDom.setBounds(10, 376, 75, 23);
-					pnlEditorMeu.add(tmOutDom);
+							//terca
+							chckbxTera.setBounds(179, 312, 75, 23);
+							chckbxTera.addItemListener(ControllerProfSaude.checkDiasSemana(this,chckbxTera, tmInTer, tmOutTer));
+							pnlEditorMeu.add(chckbxTera);
+			
+							tmInTer.setBounds(179, 342, 75, 23);
+							pnlEditorMeu.add(tmInTer);
+			
+							tmOutTer.setBounds(179, 376, 75, 23);
+							pnlEditorMeu.add(tmOutTer);
+			
+							tmInTer.setEnabled(chckbxTera.isSelected());
+							tmOutTer.setEnabled(chckbxTera.isSelected());
 
-					//segunda
-					chckbxSegunda.setBounds(94, 312, 75, 23);
-					pnlEditorMeu.add(chckbxSegunda);
-
-					tmInSeg.setBounds(94, 342, 75, 23);
-					pnlEditorMeu.add(tmInSeg);
-
-					tmOutSeg.setBounds(94, 376, 75, 23);
-					pnlEditorMeu.add(tmOutSeg);
-
-					//terca
-					chckbxTera.setBounds(179, 312, 75, 23);
-					pnlEditorMeu.add(chckbxTera);
-
-					tmInTer.setBounds(179, 342, 75, 23);
-					pnlEditorMeu.add(tmInTer);
-
-					tmOutTer.setBounds(179, 376, 75, 23);
-					pnlEditorMeu.add(tmOutTer);
-
-					//quarta
-					chckbxQuarta.setBounds(264, 312, 75, 23);
-					pnlEditorMeu.add(chckbxQuarta);
-
-					tmInQua.setBounds(264, 342, 75, 23);
-					pnlEditorMeu.add(tmInQua);
-
-					tmOutQua.setBounds(264, 376, 75, 23);
-					pnlEditorMeu.add(tmOutQua);
-
-					//quinta
-					chckbxQuinta.setBounds(353, 312, 75, 23);
-					pnlEditorMeu.add(chckbxQuinta);
-
-					tmInQui.setBounds(353, 342, 75, 23);
-					pnlEditorMeu.add(tmInQui);
-
-					tmOutQui.setBounds(353, 376, 75, 23);
-					pnlEditorMeu.add(tmOutQui);
+							//quarta
+							chckbxQuarta.setBounds(264, 312, 75, 23);
+							chckbxQuarta.addItemListener(ControllerProfSaude.checkDiasSemana(this,chckbxQuarta, tmInQua, tmOutQua));
+							pnlEditorMeu.add(chckbxQuarta);
+			
+							tmInQua.setBounds(264, 342, 75, 23);
+							pnlEditorMeu.add(tmInQua);
+			
+							tmOutQua.setBounds(264, 376, 75, 23);
+							pnlEditorMeu.add(tmOutQua);
+			
+							tmInQua.setEnabled(chckbxQuarta.isSelected());
+							tmOutQua.setEnabled(chckbxQuarta.isSelected());
 
 
-					//sexta
-					chckbxSexta.setBounds(440, 312, 75, 23);
-					pnlEditorMeu.add(chckbxSexta);
+							//quinta
+							chckbxQuinta.setBounds(353, 312, 75, 23);
+							chckbxQuinta.addItemListener(ControllerProfSaude.checkDiasSemana(this,chckbxQuinta, tmInQui, tmOutQui));
+							pnlEditorMeu.add(chckbxQuinta);
+			
+							tmInQui.setBounds(353, 342, 75, 23);
+							pnlEditorMeu.add(tmInQui);
+			
+							tmOutQui.setBounds(353, 376, 75, 23);
+							pnlEditorMeu.add(tmOutQui);
+			
+							tmInQui.setEnabled(chckbxQuinta.isSelected());
+							tmOutQui.setEnabled(chckbxQuinta.isSelected());
 
-					tmInSex.setBounds(440, 342, 75, 23);
-					pnlEditorMeu.add(tmInSex);
 
-					tmOutSex.setBounds(440, 376, 75, 23);
-					pnlEditorMeu.add(tmOutSex);
+							//sexta
+							chckbxSexta.setBounds(440, 312, 75, 23);
+							chckbxSexta.addItemListener(ControllerProfSaude.checkDiasSemana(this,chckbxSexta, tmInSex, tmOutSex));
+							pnlEditorMeu.add(chckbxSexta);
+			
+							tmInSex.setBounds(440, 342, 75, 23);
+							pnlEditorMeu.add(tmInSex);
+			
+							tmOutSex.setBounds(440, 376, 75, 23);
+							pnlEditorMeu.add(tmOutSex);
+			
+							tmInSex.setEnabled(chckbxSexta.isSelected());
+							tmOutSex.setEnabled(chckbxSexta.isSelected());
 
-					//sabado
-					chckbxSbado.setBounds(521, 312, 75, 23);
-					pnlEditorMeu.add(chckbxSbado);
 
-					tmInSab.setBounds(521, 342, 75, 23);
-					pnlEditorMeu.add(tmInSab);
+							//sabado
+							chckbxSbado.setBounds(521, 312, 75, 23);
+							chckbxSbado.addItemListener(ControllerProfSaude.checkDiasSemana(this,chckbxSbado, tmInSab, tmOutSab));
+							pnlEditorMeu.add(chckbxSbado);
+			
+							tmInSab.setBounds(521, 342, 75, 23);
+							pnlEditorMeu.add(tmInSab);
+			
+							tmOutSab.setBounds(521, 376, 75, 23);
+							pnlEditorMeu.add(tmOutSab);
+			
+							tmInSab.setEnabled(chckbxSbado.isSelected());
+							tmOutSab.setEnabled(chckbxSbado.isSelected());
 
-					tmOutSab.setBounds(521, 376, 75, 23);
-					pnlEditorMeu.add(tmOutSab);
 
 
 	
 
 				//botoes
-				btnSalvar.setBounds(10, 417, 110, 40);
+							btnSalvar.setBounds(10, 407, 110, 40);
 				btnSalvar.addActionListener(ControllerProfSaude.btnSalvarNovo(this,s));
 				pnlEditorMeu.add(btnSalvar);
 
@@ -261,6 +304,56 @@ public class AdicionarJanelaProf  extends JFrame{
 	}
 	public ProfissaoArvore getArvore(){
 		return this.treEspecializacoes;
+	}
+	public Date formatar(MeuSpiner sp){
+		try {
+			return df.parse(df.format(sp.getValue()));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	public Disponibilidade[] getDisponibilidades(){
+		
+		Disponibilidade[] retorno;
+		ArrayList<Disponibilidade> disponibilidades = new ArrayList<Disponibilidade>();
+		//pegar domingo
+		if(chckbxDomingo.isSelected()){
+			disponibilidades.add(new Disponibilidade(1, 1, formatar(tmInDom), formatar(tmOutDom)));
+		}
+		//pegar segunda
+		 if(chckbxSegunda.isSelected()){
+			 disponibilidades.add(new Disponibilidade(2, 1,  formatar(tmInSeg),  formatar(tmOutSeg)));
+		 }
+		 //pegar terca
+		 if(chckbxTera.isSelected()){
+			 disponibilidades.add(new Disponibilidade(3, 1,  formatar(tmInTer),  formatar(tmOutTer)));
+		 }
+		 //pegar quarta
+		 if(chckbxQuarta.isSelected()){
+			 disponibilidades.add(new Disponibilidade(4, 1,  formatar(tmInQua),  formatar(tmOutQua)));
+		 }
+
+		 //pegar quinta
+		 if(chckbxQuinta.isSelected()){
+			 disponibilidades.add(new Disponibilidade(5, 1,  formatar(tmInQui),  formatar(tmOutQui)));
+		 }
+		 //pegar sexta
+		 if(chckbxSexta.isSelected()){
+			 disponibilidades.add(new Disponibilidade(6, 1,  formatar(tmInSex),  formatar(tmOutSex)));
+		 }
+		 //pegar sabado
+		 if(chckbxSbado.isSelected()){
+			 disponibilidades.add(new Disponibilidade(7, 1,  formatar(tmInSab),  formatar(tmOutSab)));
+		 }
+		 
+		 retorno = new Disponibilidade[disponibilidades.size()];
+		 int i = 0;
+		 for (int keyo = 0; keyo < disponibilidades.size(); keyo++ ) {
+				retorno[i] = disponibilidades.get(keyo);
+				i++;
+		 }
+		 return retorno;
 	}
 }
 

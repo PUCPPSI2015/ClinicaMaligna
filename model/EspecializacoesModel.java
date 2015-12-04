@@ -8,10 +8,6 @@ import model.harddata.Especialidades.Especialidade;
 
 
 
-
-
-
-
 public class EspecializacoesModel extends Model{
 	private static ArrayList<Especializacao> especializacoes = new ArrayList<Especializacao>();
 	

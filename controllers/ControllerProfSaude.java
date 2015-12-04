@@ -2,10 +2,16 @@ package controllers;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.Enumeration;
 import java.util.Random;
 
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
+import javax.swing.JCheckBox;
 import javax.swing.JList;
+import javax.swing.JSpinner;
 import javax.swing.JTree;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -14,9 +20,12 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
+import controllers.ControllerProfSaude.MeuJCombo;
 import model.LoginModel;
 import model.ProfSaudeModel;
 import model.EspecializacoesModel;
+import model.DisponibilidadesModel;
+import model.DisponibilidadesModel.Disponibilidade;
 import model.dbos.Acesso;
 import model.dbos.ProfSaude;
 import model.harddata.Especialidades;
@@ -25,6 +34,7 @@ import model.harddata.Especialidades.Especialidade;
 import model.harddata.Profissoes.Profissao;
 import views.AdicionarJanelaProf;
 import views.states.StateProfSaude;
+import views.states.StateProfSaude.MeuSpiner;
 
 public class ControllerProfSaude {
 	private static Random rand;
@@ -44,14 +54,64 @@ public class ControllerProfSaude {
 		int[] especializacoes = EspecializacoesModel.getProfEsp(ocara.getId());
 
 		TreeSelectionModel sm = arvore.getSelectionModel();
-		System.out.println("Vamos entrar na funcao");
+		
 		arvore.selecionarEspecialidade(Especialidades.getByArrayDeIds(especializacoes));
+		
+		//disponibilidades
+		//preencher as combobox
+		state.preencherCbx(oid);
+
+		//resetar spinners
+		state.resetSpinners();
+		
+		//ver se ele tem algum no domungo
+		if(state.setCbx( 1, ( DisponibilidadesModel.getByProfAndDia(oid, 1) != null))){
+			Disponibilidade disp = DisponibilidadesModel.getByProfAndDia(oid, 1); 
+			state.setInOutEsp(disp.getDiaDaSemana(), disp.getInicio(), disp.getFim(),Especialidades.getOne(disp.getIdEspecialidade()));
+		}
+		//na segunda
+		if(state.setCbx( 2, ( DisponibilidadesModel.getByProfAndDia(oid, 2) != null))){
+			Disponibilidade disp = DisponibilidadesModel.getByProfAndDia(oid, 2); 
+			state.setInOutEsp(disp.getDiaDaSemana(), disp.getInicio(), disp.getFim(),Especialidades.getOne(disp.getIdEspecialidade()));
+		}
+		
+		//na TERÇA
+		if(state.setCbx( 3, ( DisponibilidadesModel.getByProfAndDia(oid, 3) != null))){
+			Disponibilidade disp = DisponibilidadesModel.getByProfAndDia(oid, 3); 
+			state.setInOutEsp(disp.getDiaDaSemana(), disp.getInicio(), disp.getFim(),Especialidades.getOne(disp.getIdEspecialidade()));
+		}
+		//na QUARTA
+		if(state.setCbx( 4, ( DisponibilidadesModel.getByProfAndDia(oid, 4) != null))){
+			Disponibilidade disp = DisponibilidadesModel.getByProfAndDia(oid, 4); 
+			state.setInOutEsp(disp.getDiaDaSemana(), disp.getInicio(), disp.getFim(),Especialidades.getOne(disp.getIdEspecialidade()));
+		}
+		//na quinta
+		if(state.setCbx( 5, ( DisponibilidadesModel.getByProfAndDia(oid, 5) != null))){
+			Disponibilidade disp = DisponibilidadesModel.getByProfAndDia(oid, 5); 
+			state.setInOutEsp(disp.getDiaDaSemana(), disp.getInicio(), disp.getFim(),Especialidades.getOne(disp.getIdEspecialidade()));
+		}
+		//na sexta
+		if(state.setCbx( 6, ( DisponibilidadesModel.getByProfAndDia(oid, 6) != null))){
+			Disponibilidade disp = DisponibilidadesModel.getByProfAndDia(oid, 6); 
+			state.setInOutEsp(disp.getDiaDaSemana(), disp.getInicio(), disp.getFim(),Especialidades.getOne(disp.getIdEspecialidade()));
+		}
+		//no sabado
+		if(state.setCbx( 7, ( DisponibilidadesModel.getByProfAndDia(oid, 7) != null))){
+			Disponibilidade disp = DisponibilidadesModel.getByProfAndDia(oid, 7); 
+			state.setInOutEsp(disp.getDiaDaSemana(), disp.getInicio(), disp.getFim(),Especialidades.getOne(disp.getIdEspecialidade()));
+		}
+		
+		;
+		
+		
 		
 		
 		
 		
 
 		state.updateFriedman(ocara.getNome(), ocara.getCpf(), acessoDoCara.getSenha(), ocara.getId(), ocara.getIdClasse());
+		
+		//!!atualizar lista de especializacoes, disponibilidades e profissionais
 		
 		
 	}
@@ -129,27 +189,35 @@ public class ControllerProfSaude {
     	
     }
     public static ActionListener btnSalvar(StateProfSaude state){
+    	state.updateFriedman();
     	return new SalvarAction(state);
     }
     private static class SalvarAction implements ActionListener{
     	private StateProfSaude s;
     	public SalvarAction(StateProfSaude state){
-    		super();
     		this.s = state; 
     	}
     	
     	public void actionPerformed(ActionEvent e) {
     		TreePath[] sel =  s.getArvore().getQuem();
-    		int[] espes = new int[sel.length];
-    		for(int i = 0; i < sel.length; i++){
-    			String esta = sel[i].getLastPathComponent().toString();
-    			espes[i] = Especialidades.getOneByName(esta).getId();
+    		int[] espes;
+    		Disponibilidade[] disponibilidades = s.getDisponibilidades();
+    		if(sel.length >= 0){
+    			espes = new int[sel.length];
+    			for(int i = 0; i < sel.length; i++){
+        			String esta = sel[i].getLastPathComponent().toString();
+        			espes[i] = Especialidades.getOneByName(esta).getId();
+        		}
     		}
-    		
-    		ProfSaudeModel.updateProf(s.getId(), s.getNome(), s.getSenha(), s.getCpf(), s.getIdClasseA(), s.getIdClasse(),espes);
+    		else{
+    			espes = new int[1];
+    			espes[0] = 0;
+    		}
+
+    		ProfSaudeModel.updateProf(s.getId(), s.getNome(), s.getSenha(), s.getCpf(), s.getIdClasseA(), s.getIdClasse(),espes, disponibilidades);
     		this.s.preencherLista(getAll());
     		EspecializacoesModel.listaRefresh();
-    		this.s.updateFriedman();
+    		this.s.hideFriedman();
     	}
     	
     }
@@ -162,10 +230,10 @@ public class ControllerProfSaude {
     		super();
     		this.s = state; 
     	}
-    	
     	public void actionPerformed(ActionEvent e) {
-    		ProfSaudeModel.deletaProf(this.s.getId(), this.s.getIdClasseA());
+    		ProfSaudeModel.inativaProf(this.s.getId());
     		this.s.preencherLista(getAll());
+    		this.s.hideFriedman();
     	}
     	
     }
@@ -178,12 +246,10 @@ public class ControllerProfSaude {
     		super();
     		this.s = state; 
     	}
-    	
     	public void actionPerformed(ActionEvent e) {
     		new AdicionarJanelaProf(this.s);
     		
     	}
-    	
     }
     public static ActionListener btnSalvarNovo(AdicionarJanelaProf janela, StateProfSaude state){
     	return new SalvarNovoAction(janela, state);
@@ -204,10 +270,10 @@ public class ControllerProfSaude {
     			String esta = sel[i].getLastPathComponent().toString();
     			espes[i] = Especialidades.getOneByName(esta).getId();
     		}
-    		
-    		ProfSaudeModel.insertProf(this.j.getNome(), this.j.getCpf(), this.j.getSenha(), this.j.getIdClasse(), espes);
+    		Disponibilidade[] disponibilidades = j.getDisponibilidades();
+    		ProfSaudeModel.insertProf(this.j.getNome(), this.j.getCpf(), this.j.getSenha(), this.j.getIdClasse(), espes, disponibilidades);
     		this.s.preencherLista(getAll());
-    		this.s.updateFriedman();
+    		this.s.hideFriedman();
     		this.j.setVisible(false); 
     		this.j.dispose();
     	}
@@ -266,10 +332,8 @@ public class ControllerProfSaude {
 
 				
 			}
-			
 			this.setExpandsSelectedPaths(true);
 			this.setSelectionPaths(path);
-
 		}
 		public TreePath[] getQuem(){
 			return this.getSelectionPaths();
@@ -290,5 +354,72 @@ public class ControllerProfSaude {
 			}
 			this.collapsePath(parent);
 		}
+		
 	}
+    public static ItemListener checkDiasSemana(AdicionarJanelaProf s, JCheckBox ch, JSpinner in, JSpinner out) {
+    	return new CheckDiasSemanaListener(s, ch, in, out);
+	}
+    public static ItemListener checkDiasSemana(StateProfSaude s, JCheckBox ch, JSpinner in, JSpinner out, MeuJCombo esp){
+		return new CheckDiasSemanaListener(s, ch, in, out, esp);
+	}
+	public static class CheckDiasSemanaListener implements ItemListener{
+		private AdicionarJanelaProf janela;
+		private StateProfSaude state;
+		private JCheckBox ch;
+		private JSpinner in, out;
+		private MeuJCombo esp;
+		public CheckDiasSemanaListener(StateProfSaude s, JCheckBox ch_, JSpinner i, JSpinner ou, MeuJCombo es){
+			state = s;
+			ch = ch_;
+			in = i;
+			out = ou;
+			esp = es;
+		}
+		public CheckDiasSemanaListener(AdicionarJanelaProf s, JCheckBox ch_, JSpinner i, JSpinner ou){
+			janela = s;
+			ch = ch_;
+			in = i;
+			out = ou;
+			esp = null;
+		}
+		public void itemStateChanged(ItemEvent arg0) {
+			in.setEnabled(ch.isSelected());
+			out.setEnabled(ch.isSelected());
+			if(esp != null)
+				esp.setEnabled(ch.isSelected());
+		}
+	}
+	public static MeuJCombo novoComboBox(StateProfSaude s, int dia){
+		return new MeuJCombo<Especialidade>(s, dia);
+	}
+	public static MeuJCombo novoComboBox(AdicionarJanelaProf s, int dia){
+		return new MeuJCombo<Especialidade>(s, dia);
+	}
+	public static class MeuJCombo<E> extends JComboBox{
+		private static final long serialVersionUID = 1L;
+		private StateProfSaude state;
+		private int dia;
+		private AdicionarJanelaProf janela;
+		public MeuJCombo(StateProfSaude s, int dia_){
+			super();
+			this.state = s;
+			this.dia = dia_;
+		}
+		public MeuJCombo(AdicionarJanelaProf s, int dia_){
+			super();
+			this.janela = s;
+			this.dia = dia_;
+		}
+		@SuppressWarnings("unchecked")
+		public void preencher(int prof){
+			System.out.println("Preencher para o " + prof);
+			int[] especializacoes = EspecializacoesModel.getProfEsp(prof);
+			Especialidade[] especialidadesDesseCara = Especialidades.getByArrayDeIds(especializacoes);
+
+			this.setModel(new DefaultComboBoxModel<Especialidade>(especialidadesDesseCara));
+		}
+		
+	}
+	
+	 
 }

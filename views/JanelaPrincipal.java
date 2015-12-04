@@ -97,6 +97,7 @@ public class JanelaPrincipal extends JFrame{
 		mnuInicio.addActionListener(ControllerPrincipal.mudador("inicio"));
 		mnuAdm.addActionListener(ControllerPrincipal.mudador("funcionarios administrativos"));
 		mnuSaude.addActionListener(ControllerPrincipal.mudador("profissionais saude"));
+		mnuAgConsultas.addActionListener(ControllerPrincipal.mudador("agendamento"));
 		mnuSair.addActionListener(ControllerPrincipal.mudador("sair"));
 		
 		pnlBotoes.add(mnuInicio);
