@@ -318,42 +318,34 @@ public class AdicionarJanelaProf  extends JFrame{
 		Disponibilidade[] retorno;
 		ArrayList<Disponibilidade> disponibilidades = new ArrayList<Disponibilidade>();
 		//pegar domingo
-		if(chckbxDomingo.isSelected()){
-			disponibilidades.add(new Disponibilidade(1, 1, formatar(tmInDom), formatar(tmOutDom)));
-		}
-		//pegar segunda
-		 if(chckbxSegunda.isSelected()){
-			 disponibilidades.add(new Disponibilidade(2, 1,  formatar(tmInSeg),  formatar(tmOutSeg)));
-		 }
-		 //pegar terca
-		 if(chckbxTera.isSelected()){
-			 disponibilidades.add(new Disponibilidade(3, 1,  formatar(tmInTer),  formatar(tmOutTer)));
-		 }
-		 //pegar quarta
-		 if(chckbxQuarta.isSelected()){
-			 disponibilidades.add(new Disponibilidade(4, 1,  formatar(tmInQua),  formatar(tmOutQua)));
-		 }
+		disponibilidades.add(new Disponibilidade(1, 1, formatar(tmInDom), formatar(tmOutDom), chckbxDomingo.isSelected()));
 
-		 //pegar quinta
-		 if(chckbxQuinta.isSelected()){
-			 disponibilidades.add(new Disponibilidade(5, 1,  formatar(tmInQui),  formatar(tmOutQui)));
-		 }
-		 //pegar sexta
-		 if(chckbxSexta.isSelected()){
-			 disponibilidades.add(new Disponibilidade(6, 1,  formatar(tmInSex),  formatar(tmOutSex)));
-		 }
-		 //pegar sabado
-		 if(chckbxSbado.isSelected()){
-			 disponibilidades.add(new Disponibilidade(7, 1,  formatar(tmInSab),  formatar(tmOutSab)));
-		 }
-		 
-		 retorno = new Disponibilidade[disponibilidades.size()];
-		 int i = 0;
-		 for (int keyo = 0; keyo < disponibilidades.size(); keyo++ ) {
-				retorno[i] = disponibilidades.get(keyo);
-				i++;
-		 }
-		 return retorno;
+		//pegar segunda
+		disponibilidades.add(new Disponibilidade(2, 1,  formatar(tmInSeg),  formatar(tmOutSeg), chckbxSegunda.isSelected()));
+		
+		//pegar terca
+		disponibilidades.add(new Disponibilidade(3, 1,  formatar(tmInTer),  formatar(tmOutTer), chckbxTera.isSelected()));
+		
+		//pegar quarta
+		disponibilidades.add(new Disponibilidade(4, 1,  formatar(tmInQua),  formatar(tmOutQua), chckbxQuarta.isSelected()));
+		
+		//pegar quinta
+		disponibilidades.add(new Disponibilidade(5, 1,  formatar(tmInQui),  formatar(tmOutQui), chckbxQuinta.isSelected()));
+		
+		//pegar sexta
+		disponibilidades.add(new Disponibilidade(6, 1,  formatar(tmInSex),  formatar(tmOutSex), chckbxSexta.isSelected()));
+		
+		//pegar sabado
+		disponibilidades.add(new Disponibilidade(7, 1,  formatar(tmInSab),  formatar(tmOutSab), chckbxSbado.isSelected()));
+		
+		
+		retorno = new Disponibilidade[disponibilidades.size()];
+		int i = 0;
+		for (int keyo = 0; keyo < disponibilidades.size(); keyo++ ) {
+			retorno[i] = disponibilidades.get(keyo);
+			i++;
+		}
+		return retorno;
 	}
 }
 

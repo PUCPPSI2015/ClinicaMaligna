@@ -481,35 +481,42 @@ public class StateProfSaude extends InternalState{
 		}
 		return s;
 	}
-	public void setInOutEsp(int dia, Time in, Time out, Especialidade esp){
+	public void setInOutEsp(int dia, Time in, Time out, Especialidade esp, boolean ativo){
 		switch (dia){
 			case 1: tmInDom.setValue(in);
 					tmOutDom.setValue(out);
 					cbxDom.setSelectedItem(esp);
+					setCbx(1,ativo);
 			break;
 			case 2: tmInSeg.setValue(in);
 					tmOutSeg.setValue(out);
 					cbxSeg.setSelectedItem(esp);
+					setCbx(2,ativo);
 			break;
 			case 3: tmInTer.setValue(in);
 					tmOutTer.setValue(out);
 					cbxTer.setSelectedItem(esp);
+					setCbx(3,ativo);
 			break;
 			case 4: tmInQua.setValue(in);
 					tmOutQua.setValue(out);
 					cbxQua.setSelectedItem(esp);
+					setCbx(4,ativo);
 			break;
 			case 5: tmInQui.setValue(in);
 					tmOutQui.setValue(out);
 					cbxQui.setSelectedItem(esp);
+					setCbx(5,ativo);
 			break;
 			case 6: tmInSex.setValue(in);
 					tmOutSex.setValue(out);
 					cbxSex.setSelectedItem(esp);
+					setCbx(6,ativo);
 			break;
 			case 7: tmInSab.setValue(in);
 					tmOutSab.setValue(out);
 					cbxSab.setSelectedItem(esp);
+					setCbx(7,ativo);
 			break;
 		}
 	}
@@ -537,54 +544,83 @@ public class StateProfSaude extends InternalState{
 		}
 		return null;
 	}
-	public Disponibilidade[] getDisponibilidades(){
+
+
+	public Disponibilidade[] getDisponibilidades( Disponibilidade dom, Disponibilidade seg, Disponibilidade ter, Disponibilidade qua, Disponibilidade qui, Disponibilidade sex, Disponibilidade sab){
 		
 		Disponibilidade[] retorno;
 		ArrayList<Disponibilidade> disponibilidades = new ArrayList<Disponibilidade>();
 		//pegar domingo
-		if(chckbxDomingo.isSelected()){
-			Especialidade esp = ((Especialidade) cbxDom.getSelectedItem());
-			disponibilidades.add(new Disponibilidade(1, esp.getId(), formatar(tmInDom), formatar(tmOutDom)));
-		}
+		dom.setAtivo(chckbxDomingo.isSelected());
+		dom.setDiaDaSemana(1);
+		dom.setIdEspecialidade(((Especialidade) cbxDom.getSelectedItem()).getId());
+		dom.setInicio(formatar(tmInDom));
+		dom.setFim(formatar(tmOutDom));
+		disponibilidades.add(dom);
+		
 		//pegar segunda
-		 if(chckbxSegunda.isSelected()){
-			 Especialidade esp = ((Especialidade) cbxSeg.getSelectedItem());
-			 disponibilidades.add(new Disponibilidade(2, esp.getId(),  formatar(tmInSeg),  formatar(tmOutSeg)));
-		 }
-		 //pegar terca
-		 if(chckbxTera.isSelected()){
-			 Especialidade esp = ((Especialidade) cbxTer.getSelectedItem());
-			 disponibilidades.add(new Disponibilidade(3, esp.getId(),  formatar(tmInTer),  formatar(tmOutTer)));
-		 }
-		 //pegar quarta
-		 if(chckbxQuarta.isSelected()){
-			 Especialidade esp = ((Especialidade) cbxQua.getSelectedItem());
-			 disponibilidades.add(new Disponibilidade(4, esp.getId(),  formatar(tmInQua),  formatar(tmOutQua)));
-		 }
+		seg.setAtivo(chckbxSegunda.isSelected());
+		seg.setDiaDaSemana(2);
+		seg.setIdEspecialidade(((Especialidade) cbxSeg.getSelectedItem()).getId());
+		seg.setInicio(formatar(tmInSeg));
+		seg.setFim(formatar(tmOutSeg));
+		disponibilidades.add(seg);
+		
+		//pegar terca
+		ter.setAtivo(chckbxTera.isSelected());
+		ter.setDiaDaSemana(3);
+		ter.setIdEspecialidade(((Especialidade) cbxTer.getSelectedItem()).getId());
+		ter.setInicio(formatar(tmInTer));
+		ter.setFim(formatar(tmOutTer));
+		disponibilidades.add(ter);
 
-		 //pegar quinta
-		 if(chckbxQuinta.isSelected()){
-			 Especialidade esp = ((Especialidade) cbxQui.getSelectedItem());
-			 disponibilidades.add(new Disponibilidade(5, esp.getId(),  formatar(tmInQui),  formatar(tmOutQui)));
-		 }
-		 //pegar sexta
-		 if(chckbxSexta.isSelected()){
-			 Especialidade esp = ((Especialidade) cbxSex.getSelectedItem());
-			 disponibilidades.add(new Disponibilidade(6, esp.getId(),  formatar(tmInSex),  formatar(tmOutSex)));
-		 }
-		 //pegar sabado
-		 if(chckbxSbado.isSelected()){
-			 Especialidade esp = ((Especialidade) cbxSab.getSelectedItem());
-			 disponibilidades.add(new Disponibilidade(7, esp.getId(),  formatar(tmInSab),  formatar(tmOutSab)));
-		 }
-		 
-		 retorno = new Disponibilidade[disponibilidades.size()];
-		 int i = 0;
-		 for (int keyo = 0; keyo < disponibilidades.size(); keyo++ ) {
-				retorno[i] = disponibilidades.get(keyo);
-				i++;
-		 }
-		 return retorno;
+		//pegar quarta
+		qua.setAtivo(chckbxQuarta.isSelected());
+		qua.setDiaDaSemana(4);
+		qua.setIdEspecialidade(((Especialidade) cbxQua.getSelectedItem()).getId());
+		qua.setInicio(formatar(tmInQua));
+		qua.setFim(formatar(tmOutQua));
+		disponibilidades.add(qua);
+
+
+
+		//pegar quinta
+		qui.setAtivo(chckbxQuinta.isSelected());
+		qui.setDiaDaSemana(5);
+		qui.setIdEspecialidade(((Especialidade) cbxQui.getSelectedItem()).getId());
+		qui.setInicio(formatar(tmInQui));
+		qui.setFim(formatar(tmOutQui));
+		disponibilidades.add(qui);
+
+		
+
+		//pegar sexta
+		sex.setAtivo(chckbxSexta.isSelected());
+		sex.setDiaDaSemana(6);
+		sex.setIdEspecialidade(((Especialidade) cbxSex.getSelectedItem()).getId());
+		sex.setInicio(formatar(tmInSex));
+		sex.setFim(formatar(tmOutSex));
+		disponibilidades.add(sex);
+
+		
+
+		//pegar sabado
+		sab.setAtivo(chckbxSbado.isSelected());
+		sab.setDiaDaSemana(7);
+		sab.setIdEspecialidade(((Especialidade) cbxSab.getSelectedItem()).getId());
+		sab.setInicio(formatar(tmInSab));
+		sab.setFim(formatar(tmOutSab));
+		disponibilidades.add(sab);
+
+		
+
+		retorno = new Disponibilidade[disponibilidades.size()];
+		int i = 0;
+		for (int keyo = 0; keyo < disponibilidades.size(); keyo++ ) {
+			retorno[i] = disponibilidades.get(keyo);
+			i++;
+		}
+		return retorno;
 	}
 	
 	

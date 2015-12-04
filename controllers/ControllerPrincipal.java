@@ -63,7 +63,7 @@ public class ControllerPrincipal {
 			janela.definirLogado();
 			janela.setTitle("Bem vindo: " + objLogado.toString());
 			//states.go("inicio");
-			states.go("profissionais saude");
+			states.go("agendamento");
 	}
 	public static void deslogar(){
 			id = "";

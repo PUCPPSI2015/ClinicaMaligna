@@ -3,6 +3,7 @@ package model;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -11,6 +12,7 @@ import java.util.Date;
 public class DisponibilidadesModel  extends Model{
 	private static ArrayList<Disponibilidade> disponibilidades = new ArrayList<Disponibilidade>();
 	private static String tabelanome = "disponibilidades";
+	private static SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
 	
 	public static void listaRefresh() {
 		disponibilidades.clear();
@@ -18,13 +20,21 @@ public class DisponibilidadesModel  extends Model{
 		try {
 			rstExiste = myStm.executeQuery("select * from " + tabelanome);
 			while(rstExiste.next()){
-				disponibilidades.add(new Disponibilidade(rstExiste.getInt("Id"), rstExiste.getInt("DiaDaSemana"), rstExiste.getInt("IdProfissional"), rstExiste.getInt("IdEspecialidade"), rstExiste.getTime("Inicio"), rstExiste.getTime("Fim") ));
+				disponibilidades.add(new Disponibilidade(rstExiste.getInt("Id"), rstExiste.getInt("DiaDaSemana"), rstExiste.getInt("IdProfissional"), rstExiste.getInt("IdEspecialidade"), rstExiste.getTime("Inicio"), rstExiste.getTime("Fim"), rstExiste.getInt("ativo")));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
-	
+	public static Disponibilidade getById(int id) {
+		listaRefresh();
+		for (int key = 0; key < disponibilidades.size(); key++ ) {
+			Disponibilidade esta = disponibilidades.get(key); 
+			if(esta.getId() == id)
+				return esta;
+		}
+		return null;
+	}
 	public static Disponibilidade getByProfAndDia(int prof, int dia){
 		listaRefresh();
 		for (int key = 0; key < disponibilidades.size(); key++ ) {
@@ -34,10 +44,52 @@ public class DisponibilidadesModel  extends Model{
 		}
 		return null;		
 	}
+	public static void insertDisp(int resultado, Disponibilidade[] disponibilidades){
+		try {
+		//iterar entre dias da semana
+		for(int j = 0; j< disponibilidades.length; j++){
+			//insert
+				myStm.executeUpdate("insert into disponibilidades " + 
+					"(ativo, DiaDaSemana, Inicio, Fim, IdProfissional, IdEspecialidade) " + 
+					"values(" + disponibilidades[j].getAtivo() + "," + disponibilidades[j].getDiaDaSemana() + ",'" + df.format(disponibilidades[j].getInicio()) + "','" + df.format(disponibilidades[j].getFim()) + "'," + resultado + "," + disponibilidades[j].getIdEspecialidade() + ")");
+			}
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+	}
+	public static void updateDisp(int idprof,  Disponibilidade[] alteradas){
+		try {
+
+			if(alteradas.length > 0)
+				for(int a = 0; a < alteradas.length; a++){
+					
+					//aletrar as disponibilidades
+					System.out.println("update "+ tabelanome + " " +
+							"set ativo=" + alteradas[a].getAtivo()+ ", DiaDaSemana=" + alteradas[a].getDiaDaSemana()+ ",  Inicio='" + alteradas[a].getInicio()+ "', Fim='" + alteradas[a].getFim()+ "', IdProfissional=" + idprof + ", IdEspecialidade=" + alteradas[a].getIdEspecialidade()+ " "+ 
+							"where Id=" + alteradas[a].getId() + " ");
+					myStm.executeUpdate("update "+ tabelanome + " " +
+							"set ativo=" + alteradas[a].getAtivo()+ ", DiaDaSemana=" + alteradas[a].getDiaDaSemana()+ ",  Inicio='" + alteradas[a].getInicio()+ "', Fim='" + alteradas[a].getFim()+ "', IdProfissional=" + idprof + ", IdEspecialidade=" + alteradas[a].getIdEspecialidade()+ " "+ 
+							"where Id=" + alteradas[a].getId() + " ");
+					
+					//a fazer
+					//inativar consultas fora do horario
+					 //inicio antes do inicio
+					 //inicio depois do fim
+					 //fim depois do fim
+					
+					
+				
+					
+					
+				}
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+	}
 	
 	
 	public static class Disponibilidade{
-		int id,diaDaSemana,idProfissional,idEspecialidade;
+		int id,diaDaSemana,idProfissional,idEspecialidade, ativo = 1;
 		Time inicio, fim;
 
 		public Disponibilidade(int id, int diaDaSemana, int idProfissional, int idEspecialidade, Time inicio, Time fim) {
@@ -54,6 +106,16 @@ public class DisponibilidadesModel  extends Model{
 			}
 
 		}
+		
+		public Disponibilidade(int id, int diaDaSemana, int idProfissional, int idEspecialidade, Time inicio, Time fim, int ativo){
+			this(id, diaDaSemana,idProfissional,idEspecialidade, inicio, fim);
+			this.ativo = ativo;
+		} 
+		public Disponibilidade(int id, int diaDaSemana, int idProfissional, int idEspecialidade, Time inicio, Time fim, boolean ativo){
+			this(id, diaDaSemana,idProfissional,idEspecialidade, inicio, fim);
+			if(ativo) this.ativo = 1;
+			else this.ativo = 0;
+		}
 		@SuppressWarnings("deprecation")
 		public Disponibilidade(int diaDaSemana,  int idEspecialidade, Date inicio, Date fim) {
 			this.diaDaSemana = diaDaSemana;
@@ -66,6 +128,17 @@ public class DisponibilidadesModel  extends Model{
 				this.fim = new Time(inicio.getHours(), inicio.getMinutes(), inicio.getSeconds());
 			}
 		}
+		public Disponibilidade(int diaDaSemana,  int idEspecialidade, Date inicio, Date fim, int ativo) {
+			this(diaDaSemana, idEspecialidade,inicio,fim);
+			this.ativo = ativo;
+		}
+		public Disponibilidade(int diaDaSemana,  int idEspecialidade, Date inicio, Date fim, boolean ativo) {
+			this(diaDaSemana, idEspecialidade,inicio,fim);
+			if(ativo) this.ativo = 1;
+			else this.ativo = 0;
+			
+		}
+		
 		public int getId() {
 			return id;
 		}
@@ -96,12 +169,33 @@ public class DisponibilidadesModel  extends Model{
 		public void setInicio(Time inicio) {
 			this.inicio = inicio;
 		}
+		public void setInicio(Date inicio) {
+			this.inicio = new Time(inicio.getHours(), inicio.getMinutes(), inicio.getSeconds());
+		}
 		public Time getFim() {
 			return fim;
 		}
 		public void setFim(Time fim) {
 			this.fim = fim;
 		}
+		public void setFim(Date fim) {
+			this.fim = new Time(fim.getHours(), fim.getMinutes(), fim.getSeconds());
+		}
+		public void setAtivo(boolean a){
+			if(a) ativo = 1;
+			else ativo = 0;
+		}
+		public boolean getAtivoBool(){
+			if(ativo > 0) return true;
+			return false;
+		}
+		public void setAtivo(int a){
+			this.ativo = a;
+		}
+		public int getAtivo(){
+			return this.ativo;
+		}
+		
 		public String toString(){
 			return "Disponibilidade de " + ProfSaudeModel.getOne(idProfissional) + " no dia " + new DiaSemana(diaDaSemana).toString()  + ";";
 		}
@@ -130,4 +224,5 @@ public class DisponibilidadesModel  extends Model{
 			return "indefinido";
 		}
 	}
+	
 }

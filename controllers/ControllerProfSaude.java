@@ -20,7 +20,6 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-import controllers.ControllerProfSaude.MeuJCombo;
 import model.LoginModel;
 import model.ProfSaudeModel;
 import model.EspecializacoesModel;
@@ -34,10 +33,11 @@ import model.harddata.Especialidades.Especialidade;
 import model.harddata.Profissoes.Profissao;
 import views.AdicionarJanelaProf;
 import views.states.StateProfSaude;
-import views.states.StateProfSaude.MeuSpiner;
+
 
 public class ControllerProfSaude {
 	private static Random rand;
+	private static Disponibilidade dom, seg, ter, qua, qui, sex, sab;
 	public static ProfSaude[] getAll(){
 		return  ProfSaudeModel.getAll();
 	}
@@ -65,40 +65,47 @@ public class ControllerProfSaude {
 		state.resetSpinners();
 		
 		//ver se ele tem algum no domungo
-		if(state.setCbx( 1, ( DisponibilidadesModel.getByProfAndDia(oid, 1) != null))){
-			Disponibilidade disp = DisponibilidadesModel.getByProfAndDia(oid, 1); 
-			state.setInOutEsp(disp.getDiaDaSemana(), disp.getInicio(), disp.getFim(),Especialidades.getOne(disp.getIdEspecialidade()));
+		dom = DisponibilidadesModel.getByProfAndDia(oid, 1);
+		if( dom != null){
+			Disponibilidade disp = dom; 
+			state.setInOutEsp(disp.getDiaDaSemana(), disp.getInicio(), disp.getFim(),Especialidades.getOne(disp.getIdEspecialidade()), disp.getAtivoBool());
 		}
 		//na segunda
-		if(state.setCbx( 2, ( DisponibilidadesModel.getByProfAndDia(oid, 2) != null))){
-			Disponibilidade disp = DisponibilidadesModel.getByProfAndDia(oid, 2); 
-			state.setInOutEsp(disp.getDiaDaSemana(), disp.getInicio(), disp.getFim(),Especialidades.getOne(disp.getIdEspecialidade()));
+		seg = DisponibilidadesModel.getByProfAndDia(oid, 2);
+		if(seg != null){
+			Disponibilidade disp = seg; 
+			state.setInOutEsp(disp.getDiaDaSemana(), disp.getInicio(), disp.getFim(),Especialidades.getOne(disp.getIdEspecialidade()), disp.getAtivoBool());
 		}
 		
 		//na TERÇA
-		if(state.setCbx( 3, ( DisponibilidadesModel.getByProfAndDia(oid, 3) != null))){
-			Disponibilidade disp = DisponibilidadesModel.getByProfAndDia(oid, 3); 
-			state.setInOutEsp(disp.getDiaDaSemana(), disp.getInicio(), disp.getFim(),Especialidades.getOne(disp.getIdEspecialidade()));
+		ter = DisponibilidadesModel.getByProfAndDia(oid, 3);
+		if( ter != null){
+			Disponibilidade disp = ter; 
+			state.setInOutEsp(disp.getDiaDaSemana(), disp.getInicio(), disp.getFim(),Especialidades.getOne(disp.getIdEspecialidade()), disp.getAtivoBool());
 		}
 		//na QUARTA
-		if(state.setCbx( 4, ( DisponibilidadesModel.getByProfAndDia(oid, 4) != null))){
-			Disponibilidade disp = DisponibilidadesModel.getByProfAndDia(oid, 4); 
-			state.setInOutEsp(disp.getDiaDaSemana(), disp.getInicio(), disp.getFim(),Especialidades.getOne(disp.getIdEspecialidade()));
+		qua = DisponibilidadesModel.getByProfAndDia(oid, 4);
+		if( qua != null){
+			Disponibilidade disp = qua; 
+			state.setInOutEsp(disp.getDiaDaSemana(), disp.getInicio(), disp.getFim(),Especialidades.getOne(disp.getIdEspecialidade()), disp.getAtivoBool());
 		}
 		//na quinta
-		if(state.setCbx( 5, ( DisponibilidadesModel.getByProfAndDia(oid, 5) != null))){
-			Disponibilidade disp = DisponibilidadesModel.getByProfAndDia(oid, 5); 
-			state.setInOutEsp(disp.getDiaDaSemana(), disp.getInicio(), disp.getFim(),Especialidades.getOne(disp.getIdEspecialidade()));
+		qui = DisponibilidadesModel.getByProfAndDia(oid, 5);
+		if( qui != null){
+			Disponibilidade disp = qui; 
+			state.setInOutEsp(disp.getDiaDaSemana(), disp.getInicio(), disp.getFim(),Especialidades.getOne(disp.getIdEspecialidade()), disp.getAtivoBool());
 		}
 		//na sexta
-		if(state.setCbx( 6, ( DisponibilidadesModel.getByProfAndDia(oid, 6) != null))){
-			Disponibilidade disp = DisponibilidadesModel.getByProfAndDia(oid, 6); 
-			state.setInOutEsp(disp.getDiaDaSemana(), disp.getInicio(), disp.getFim(),Especialidades.getOne(disp.getIdEspecialidade()));
+		sex = DisponibilidadesModel.getByProfAndDia(oid, 6);
+		if( sex != null){
+			Disponibilidade disp = sex; 
+			state.setInOutEsp(disp.getDiaDaSemana(), disp.getInicio(), disp.getFim(),Especialidades.getOne(disp.getIdEspecialidade()), disp.getAtivoBool());
 		}
 		//no sabado
-		if(state.setCbx( 7, ( DisponibilidadesModel.getByProfAndDia(oid, 7) != null))){
-			Disponibilidade disp = DisponibilidadesModel.getByProfAndDia(oid, 7); 
-			state.setInOutEsp(disp.getDiaDaSemana(), disp.getInicio(), disp.getFim(),Especialidades.getOne(disp.getIdEspecialidade()));
+		sab = DisponibilidadesModel.getByProfAndDia(oid, 7);
+		if( sab != null){
+			Disponibilidade disp = sab; 
+			state.setInOutEsp(disp.getDiaDaSemana(), disp.getInicio(), disp.getFim(),Especialidades.getOne(disp.getIdEspecialidade()), disp.getAtivoBool());
 		}
 		
 		;
@@ -201,7 +208,9 @@ public class ControllerProfSaude {
     	public void actionPerformed(ActionEvent e) {
     		TreePath[] sel =  s.getArvore().getQuem();
     		int[] espes;
-    		Disponibilidade[] disponibilidades = s.getDisponibilidades();
+    		Disponibilidade[] disponibilidades = s.getDisponibilidades(dom, seg, ter, qua, qui, sex, sab);
+    		
+    		
     		if(sel.length >= 0){
     			espes = new int[sel.length];
     			for(int i = 0; i < sel.length; i++){
@@ -264,11 +273,18 @@ public class ControllerProfSaude {
     	}
     	
     	public void actionPerformed(ActionEvent e) {
-    		TreePath[] sel =  this.j.getArvore().getQuem();
-    		int[] espes = new int[sel.length];
-    		for(int i = 0; i < sel.length; i++){
-    			String esta = sel[i].getLastPathComponent().toString();
-    			espes[i] = Especialidades.getOneByName(esta).getId();
+    		TreePath[] sel =  s.getArvore().getQuem();
+    		int[] espes;
+    		if(sel.length >= 0){
+    			espes = new int[sel.length];
+    			for(int i = 0; i < sel.length; i++){
+        			String esta = sel[i].getLastPathComponent().toString();
+        			espes[i] = Especialidades.getOneByName(esta).getId();
+        		}
+    		}
+    		else{
+    			espes = new int[1];
+    			espes[0] = 0;
     		}
     		Disponibilidade[] disponibilidades = j.getDisponibilidades();
     		ProfSaudeModel.insertProf(this.j.getNome(), this.j.getCpf(), this.j.getSenha(), this.j.getIdClasse(), espes, disponibilidades);
@@ -412,7 +428,6 @@ public class ControllerProfSaude {
 		}
 		@SuppressWarnings("unchecked")
 		public void preencher(int prof){
-			System.out.println("Preencher para o " + prof);
 			int[] especializacoes = EspecializacoesModel.getProfEsp(prof);
 			Especialidade[] especialidadesDesseCara = Especialidades.getByArrayDeIds(especializacoes);
 

@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 
 
+
 import com.mysql.jdbc.Statement;
 
 import model.dbos.FuncAdmin;
@@ -26,7 +27,7 @@ import model.DisponibilidadesModel.Disponibilidade;
 public class ProfSaudeModel extends Model{
 	private static ArrayList<ProfSaude> profissionais = new ArrayList<ProfSaude>();
 	private static String tabelanome = "profissionaissaude";
-	private static SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
+	
 	public static ProfSaude[] getAll(){
 		listaRefreshAll();
 		ProfSaude[] retorno =  new ProfSaude[profissionais.size()];
@@ -68,6 +69,7 @@ public class ProfSaudeModel extends Model{
 		}
 		return null;
 	}
+	
 	public static void insertProf(String nome, String cpf, String senha, String idClasse, int[] especializacoes, Disponibilidade[] disponibilidades){
 		try {
 			ResultSet rstExiste;
@@ -116,21 +118,15 @@ public class ProfSaudeModel extends Model{
 			
 			
 			//disponibilidades
-			//iterar entre cada uma
-			
-				for(int j = 0; j< disponibilidades.length; j++){
-				//insert
-					myStm.executeUpdate("insert into disponibilidades " + 
-						"(DiaDaSemana, Inicio, Fim, IdProfissional, IdEspecialidade) " + 
-						"values(" + disponibilidades[j].getDiaDaSemana() + ",'" + df.format(disponibilidades[j].getInicio()) + "','" + df.format(disponibilidades[j].getFim()) + "'," + resultado + "," + disponibilidades[j].getIdEspecialidade() + ")");
-				}
+			DisponibilidadesModel.insertDisp(resultado, disponibilidades);
+				
 			
 			
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
-	public static void updateProf(int id, String nome, String senha, String cpf, String idClasseAntiga, String idClasse, int[] especializacoes, Disponibilidade[] disponibilidades){
+	public static void updateProf(int id, String nome, String senha, String cpf, String idClasseAntiga, String idClasse, int[] especializacoes, Disponibilidade[] alteradas){
 		ResultSet rstExiste;
 		String updeitap = 	"update "+ tabelanome + " " + 
 		"set Nome='" + nome + "',CPF='" + cpf + "',IdClasse='" + idClasse + "' "+ 
@@ -167,7 +163,14 @@ public class ProfSaudeModel extends Model{
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
+		
+		
 		//disponibilidades
+		DisponibilidadesModel.updateDisp(id, alteradas);
+		
+		
+		/*
+		
 		//deletar tudo
 		try {
 			myStm.executeUpdate("delete from disponibilidades " +
@@ -189,6 +192,8 @@ public class ProfSaudeModel extends Model{
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
+		
+		*/
 		
 		
 		
