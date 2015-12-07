@@ -17,8 +17,10 @@ import java.util.ArrayList;
 
 
 
+
 import com.mysql.jdbc.Statement;
 
+import controllers.ControllerPrincipal;
 import model.dbos.FuncAdmin;
 import model.dbos.ProfSaude;
 import model.dbos.ProfSaude;
@@ -86,6 +88,8 @@ public class ProfSaudeModel extends Model{
 			
 			if (rs.next()){
 				resultado = rs.getInt(1);
+			} else {
+				ControllerPrincipal.gritar("Não Possivel recuperar o id de novo profissional, Contate o administrador do banco de dados", "Erro do banco");
 			}
 			rs.close();
 
@@ -95,7 +99,7 @@ public class ProfSaudeModel extends Model{
 			"values('m" + resultado + "','" + senha + "')";
 			String insercao3 =	"insert into acesso " + 
 			"(Login, Senha) " + 
-			"values('c" + cpf + "','" + senha + "')";
+			"values('c" + idClasse + "','" + senha + "')";
 			
 			myStm.executeUpdate(insercao2);
 			myStm.executeUpdate(insercao3);

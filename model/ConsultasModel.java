@@ -8,6 +8,11 @@ import java.util.ArrayList;
 
 
 
+
+
+
+import model.ConsultasModel.Consulta;
+import model.DisponibilidadesModel.Disponibilidade;
 import model.harddata.Especialidades;
 
 
@@ -71,13 +76,32 @@ public class ConsultasModel extends Model{
 			}
 		return retorno;	
 	}
-	
-	public static void updateConsultaParcial(int id, Date d, Time i, Time f, int p, int d1){
+	public static Consulta[] getByDispo(int disp){
+		listaRefresh();
+		ArrayList<Consulta> estasconsultas = new ArrayList<Consulta>();
+		for (int key = 0; key < consultas.size(); key++ ) {
+			Consulta esta = consultas.get(key); 
+			if(esta.getIdDisponibilidade() == disp){
+					estasconsultas.add(esta);
+			}
+				
+		}
+		
+		Consulta[] retorno = new Consulta[estasconsultas.size()];
+		
+		if(estasconsultas.size() > 0)
+			for (int j = 0; j < estasconsultas.size(); j++ ) {
+			
+				retorno[j] = estasconsultas.get(j);
+			}
+		return retorno;	
+	}
+	public static void updateConsultaParcial(int id, Date d, Time i, Time f, int p, int dd){
 		
 		try {
 			myStm.executeUpdate("update "+ tabelanome + " " +
 					"set Data='" + d + "', Inicio='" + i + "', Fim='" + f+ "', IdPaciente='" + p + "', "+
-					"IdDisponibilidade='" + d1+ "' "+
+					"IdDisponibilidade='" + dd+ "' "+
 					"where Id=" + id + " ");
 			
 			
@@ -85,6 +109,53 @@ public class ConsultasModel extends Model{
 			e.printStackTrace();
 		}
 	}
+	public static void novaConsultaParcial(Date d, Time i, Time f, int p, int dd){
+		
+		//criar consulta
+		String insercao = 	"insert into "+ tabelanome + " " +
+				"(Data, Inicio, Fim, IdPaciente, IdDisponibilidade) " +
+				"values ('" + d + "', '" + i + "', '" + f + "', " + p + ", " + dd + " )";
+		
+		try {
+			myStm.executeUpdate(insercao);
+			listaRefresh();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	public static void excluirConsulta(int id) {
+		String deletacao =  "delete from "+ tabelanome + " " +
+				"where Id=" + id + "";
+		try {
+			myStm.executeUpdate(deletacao);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	public static void desmarcarConsulta(int id){
+		
+		try {
+			myStm.executeUpdate("update "+ tabelanome + " " +
+					"set ativo=0 " +
+					"where Id=" + id + " ");
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	public static void marcarConsulta(int id){
+		
+		try {
+			myStm.executeUpdate("update "+ tabelanome + " " +
+					"set ativo=1 " +
+					"where Id=" + id + " ");
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	
 	
 	public static class Consulta{
@@ -149,6 +220,9 @@ public class ConsultasModel extends Model{
 		public int getAtivo() {
 			return ativo;
 		}
+		public boolean getAtivoBool() {
+			return (ativo != 0);
+		}
 		public void setAtivo(int ativo) {
 			this.ativo = ativo;
 		}
@@ -195,10 +269,20 @@ public class ConsultasModel extends Model{
 			this.data = data;
 		}
 		public String toString(){
-			return "Consulta " + PacientesModel.getById(idPaciente).toString() +" : " + Especialidades.getOne( DisponibilidadesModel.getById(idDisponibilidade).getIdEspecialidade() ).toString() + "";
+			String aStr;
+			if(ativo == 0) aStr = "desmarcada";
+			else aStr = "marcada";
+			return "Consulta " + aStr + " " + PacientesModel.getById(idPaciente).toString() +" : " + Especialidades.getOne( DisponibilidadesModel.getById(idDisponibilidade).getIdEspecialidade() ).toString();
 		}
 		
 	}
+
+
+
+	
+
+
+	
 
 
 	

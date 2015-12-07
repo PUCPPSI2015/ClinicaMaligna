@@ -2,7 +2,7 @@ package model.dbos;
 
 import model.harddata.Cargos;
 
-public class FuncAdmin {
+public class FuncAdmin implements EmpregadoClinica{
 	private String nome;
 	private int id, cargo;
 	public FuncAdmin(int i, int c, String n){
@@ -32,6 +32,12 @@ public class FuncAdmin {
 	//para a lista
 	public String toString(){
 		return this.nome + " - " + Cargos.get(this.cargo);
+	}
+	public boolean isFuncadmin() {
+		return true;
+	}
+	public boolean isProfsaude() {
+		return false;
 	}
 	
 }

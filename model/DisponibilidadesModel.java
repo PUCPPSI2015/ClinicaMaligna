@@ -7,6 +7,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import model.ConsultasModel.Consulta;
+import controllers.ControllerPrincipal;
+
 
 
 public class DisponibilidadesModel  extends Model{
@@ -62,24 +65,42 @@ public class DisponibilidadesModel  extends Model{
 
 			if(alteradas.length > 0)
 				for(int a = 0; a < alteradas.length; a++){
+					Disponibilidade atual = alteradas[a];
 					
-					//aletrar as disponibilidades
-					System.out.println("update "+ tabelanome + " " +
-							"set ativo=" + alteradas[a].getAtivo()+ ", DiaDaSemana=" + alteradas[a].getDiaDaSemana()+ ",  Inicio='" + alteradas[a].getInicio()+ "', Fim='" + alteradas[a].getFim()+ "', IdProfissional=" + idprof + ", IdEspecialidade=" + alteradas[a].getIdEspecialidade()+ " "+ 
-							"where Id=" + alteradas[a].getId() + " ");
+					//ver se esta desmarcando
+						//procurar consultas nessa disponibilidade,
+							//alertar desmarcacao
+							//desmarcar
+					//caso nao
+						//procurar consultas nessa disponibilidade,
+							//verificar se esta consulta ficará fora do horario novo
+								//alertar desmarcacao
+								//desmarcar
+					Consulta[] conflitantes = ConsultasModel.getByDispo(atual.getId());
+					if(!alteradas[a].getAtivoBool()){
+						for(int h = 0; h < conflitantes.length; h++){ //procurar consultas nesta disponibilidade
+							Consulta comparada =  conflitantes[h];
+							if(comparada.getAtivoBool()){
+								ControllerPrincipal.gritar("A " + comparada.toString() + " está maracda para uma disponibilidade inativa, então será desmarcada.","Consulta nesta disponibilidade");
+								ConsultasModel.desmarcarConsulta(comparada.getId());
+							}
+						}
+					}else{						
+						for(int h = 0; h < conflitantes.length; h++){ //procurar consultas nesta disponibilidade
+							Consulta comparada =  conflitantes[h];
+							if(comparada.getAtivoBool()){
+								if((comparada.getInicio().before(atual.getInicio())) || (comparada.getFim().after(atual.getFim()))){
+									ControllerPrincipal.gritar("A " + comparada.toString() + " está maracda para um horário que ficará fora de disponibildiade, então será desmarcada.","Consulta nesta disponibilidade");
+									ConsultasModel.desmarcarConsulta(comparada.getId());
+								}
+							}
+						}
+					}
+					//fazer alteracao
 					myStm.executeUpdate("update "+ tabelanome + " " +
-							"set ativo=" + alteradas[a].getAtivo()+ ", DiaDaSemana=" + alteradas[a].getDiaDaSemana()+ ",  Inicio='" + alteradas[a].getInicio()+ "', Fim='" + alteradas[a].getFim()+ "', IdProfissional=" + idprof + ", IdEspecialidade=" + alteradas[a].getIdEspecialidade()+ " "+ 
+							"set ativo=" + alteradas[a].getAtivo() + ", DiaDaSemana=" + alteradas[a].getDiaDaSemana()+ ",  Inicio='" + alteradas[a].getInicio()+ "', Fim='" + alteradas[a].getFim()+ "', IdProfissional=" + idprof + ", IdEspecialidade=" + alteradas[a].getIdEspecialidade()+ " "+ 
 							"where Id=" + alteradas[a].getId() + " ");
-					
-					//a fazer
-					//inativar consultas fora do horario
-					 //inicio antes do inicio
-					 //inicio depois do fim
-					 //fim depois do fim
-					
-					
-				
-					
+
 					
 				}
 		} catch (SQLException e1) {

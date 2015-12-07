@@ -164,7 +164,7 @@ public class Calendario extends JPanel{
 
 	    }
 	    
-	  
+	 
 	  
 	  
 	  //inner classes
@@ -260,4 +260,11 @@ public class Calendario extends JPanel{
 	    public int getAno(){
 	    	return currentYear;
 	    }
+
+		public boolean isIndisponivel(int c) {
+			for(int i = 0; i < desativadas.size(); i++){
+				if(desativadas.get(i).equals(c)) return true;
+			}
+			return false;
+		}
 }

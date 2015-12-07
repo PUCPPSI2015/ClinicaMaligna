@@ -98,6 +98,7 @@ public class JanelaPrincipal extends JFrame{
 		mnuAdm.addActionListener(ControllerPrincipal.mudador("funcionarios administrativos"));
 		mnuSaude.addActionListener(ControllerPrincipal.mudador("profissionais saude"));
 		mnuAgConsultas.addActionListener(ControllerPrincipal.mudador("agendamento"));
+		mnuRgConsultas.addActionListener(ControllerPrincipal.mudador("registro"));
 		mnuSair.addActionListener(ControllerPrincipal.mudador("sair"));
 		
 		pnlBotoes.add(mnuInicio);
@@ -166,6 +167,22 @@ public class JanelaPrincipal extends JFrame{
 	public void limparArea(){
 		areaStates.removeAll(); 
 		areaStates.updateUI();
+	}
+	public void ativarProfSaude() {
+		 mnuInicio.setVisible(true);
+		 mnuAdm.setVisible(false);
+		 mnuSaude.setVisible(false);
+		 mnuAgConsultas.setVisible(false);
+		mnuRgConsultas.setVisible(true);
+		mnuSair.setVisible(true);
+	}
+	public void ativarFuncadmin() {
+		mnuInicio.setVisible(true);
+		mnuAdm.setVisible(true);
+		mnuSaude.setVisible(true);
+		mnuAgConsultas.setVisible(true);
+		mnuRgConsultas.setVisible(false);
+		mnuSair.setVisible(true);
 	}
 	
 	

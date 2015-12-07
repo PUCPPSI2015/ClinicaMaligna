@@ -3,10 +3,10 @@ package views.states;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.swing.BorderFactory;
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -14,12 +14,12 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
+import javax.swing.JTable;
 import javax.swing.SpinnerDateModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
 
 import controllers.ControllerAgendamento;
-import controllers.ControllerProfSaude;
 import model.ConsultasModel.Consulta;
 import model.PacientesModel.Paciente;
 import model.dbos.ProfSaude;
@@ -31,22 +31,33 @@ public class StateAgendamento extends State{
 	JComboBox cbxProfissional = new JComboBox<ProfSaude>(ControllerAgendamento.getAllProf());
 	Calendario pnlCalendar = new Calendario();
 	JPanel area1 = new JPanel();
+	private static SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
+	private static SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
 	
 	//area2
 	JPanel area2 = new JPanel();
 	JLabel lblConsultasMaracadasPara = new JLabel("Consultas maracadas:");
 	JList lstConsultas = new JList();
 	JScrollPane scrConsultas = new JScrollPane();
+	JButton btnMarcarNovaConsulta = new JButton("Marcar nova consulta");
 	
 	//area3
 	JPanel area3 = new JPanel();
 	JLabel lblEsp = new JLabel("Especialidade");
 	JLabel label = new JLabel("Paciente:");
 	JLabel lblProf = new JLabel("Profissional");
+	JLabel lblDInicio = new JLabel("");
+	JLabel lblDFim = new JLabel("");
+	JLabel lblAtivo = new JLabel("");
+	
+	
 	JComboBox<Paciente> cbxPac = new JComboBox<Paciente>(ControllerAgendamento.getAllPac());
 	MeuSpiner 	tmIn = new MeuSpiner(), 
 				tmOut = new MeuSpiner();
-	JButton btnSalvar = new JButton("Salvar");
+	JButton btnSalvar = new JButton("Salvar"),
+			btnDesmarcar = new JButton("Desmarcar"),
+			btnMarcar = new JButton("Marcar"),
+			btnExcluir = new JButton("Excluir");
 	
 	Consulta editando = null;
 	
@@ -76,6 +87,8 @@ public class StateAgendamento extends State{
 		cbxProfissional.addActionListener(ControllerAgendamento.cbxChange(cbxProfissional, pnlCalendar));
 		cbxProfissional.setBounds(10, 54, 377, 20);
 		
+		cbxProfissional.setSelectedIndex(0);
+		
 		pnlCalendar.getCalendarTable().addMouseListener(ControllerAgendamento.calendarSel( pnlCalendar));
 		pnlCalendar.setBounds(10, 92, 377, 354);
 		pnlCalendar.setBackground(Color.WHITE);
@@ -104,6 +117,10 @@ public class StateAgendamento extends State{
 		scrConsultas.setViewportView(lstConsultas);
 		scrConsultas.setBorder(BorderFactory.createEmptyBorder(00,00,00,00));
 		
+		btnMarcarNovaConsulta.setBounds(172, 33, 135, 23);
+		btnMarcarNovaConsulta.addActionListener(ControllerAgendamento.btnNovo(pnlCalendar));
+		area2.add(btnMarcarNovaConsulta);
+		
 		area2.setLayout(null);
 		area2.add(scrConsultas);
 		area2.add(lblConsultasMaracadasPara);
@@ -111,7 +128,7 @@ public class StateAgendamento extends State{
 		
 		
 		/*
-		 * Area 2
+		 * Area 3
 		 * 
 		 * */
 		area3.setBounds(877, 0, 397, 723);
@@ -145,14 +162,44 @@ public class StateAgendamento extends State{
 		tmIn.setBounds(10, 167, 124, 26);
 		area3.add(tmIn);
 		
+		lblDInicio.setBounds(144, 167, 184, 26);
+		area3.add(lblDInicio);
+		
 		
 		tmOut.setBounds(10, 203, 124, 26);
 		area3.add(tmOut);
 		
+		lblDFim.setBounds(144, 203, 184, 26);
+		area3.add(lblDFim);
 		
-		btnSalvar.setBounds(10, 240, 124, 34);
+		
+		lblAtivo.setBounds(10, 240, 184, 34);
+		area3.add(lblAtivo);
+	
+		
+		
+		btnSalvar.setBounds(10, 280, 124, 34);
 		btnSalvar.addActionListener(ControllerAgendamento.btnSalvar());
 		area3.add(btnSalvar);
+		
+		
+		btnDesmarcar.setBounds(144, 280, 100, 34);
+		btnDesmarcar.setForeground(Color.RED);
+		btnDesmarcar.addActionListener(ControllerAgendamento.btnDesmarcar());
+		area3.add(btnDesmarcar);
+		
+		btnMarcar.setBounds(144, 280, 100, 34);
+		btnMarcar.addActionListener(ControllerAgendamento.btnMarcar());
+		btnMarcar.setVisible(false);
+		area3.add(btnMarcar);
+		
+		
+		btnExcluir.setBounds(254, 280, 84, 34);
+		btnExcluir.setForeground(Color.RED);
+		btnExcluir.addActionListener(ControllerAgendamento.btnExcluir());
+		area3.add(btnExcluir);
+		
+		
 		myPainel.add(area3);
 		
 		
@@ -174,7 +221,7 @@ public class StateAgendamento extends State{
 	public void fillConsultas(Consulta[] consultas){
 		lstConsultas.setListData(consultas);
 	}
-	public void updateA3(Consulta c, String prof, String Esp, Paciente pac, Comparable inicio, Comparable fim, Comparable cinicio, Comparable cfim){
+	public void updateA3(Consulta c, String prof, String Esp, Paciente pac, Comparable inicio, Comparable fim, Comparable cinicio, Comparable cfim, boolean ehNovo){
 		area3.setVisible(true);
 		lblProf.setText(prof);
 		lblEsp.setText(Esp);
@@ -183,16 +230,37 @@ public class StateAgendamento extends State{
 		((SpinnerDateModel) tmIn.getModel()).setStart(inicio);
 		((SpinnerDateModel) tmIn.getModel()).setEnd(fim);*/
 		cbxPac.setSelectedItem(pac);
-
+		
+		lblDInicio.setText("Horario de entrada: " + df.format(inicio));
+		lblDFim.setText("Horario de Saída: " + df.format(fim));
 		
 		tmIn.setValue(cinicio);
 		tmOut.setValue(cfim);
-		editando = c;
+		editando = c;		
 		
+		lblAtivo.setVisible(!ehNovo);
+		btnDesmarcar.setVisible(!ehNovo);
+		btnMarcar.setVisible(!ehNovo);
+		btnExcluir.setVisible(!ehNovo);
+		
+		
+		//ativo ou nao
+		if(!ehNovo){
+			if(c.getAtivoBool()){
+				lblAtivo.setText("Consulta marcada");
+			}
+			else{
+				lblAtivo.setText("Consulta desmarcada");
+			} 
+			btnDesmarcar.setVisible(c.getAtivoBool());
+			btnMarcar.setVisible(!c.getAtivoBool());
+		}
 		
 		
 	}
 	public void updateA3(){
+		editando = null;
+		lblAtivo.setText("");
 		area3.setVisible(false);
 	}
 	public static class MeuSpiner extends JSpinner{
@@ -217,5 +285,10 @@ public class StateAgendamento extends State{
 	}
 	public MeuSpiner getTmOut(){
 		return tmOut;
+	}
+
+
+	public JList<Consulta> getListaConsultas() {
+		return lstConsultas;
 	}
 }

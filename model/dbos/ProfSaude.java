@@ -1,6 +1,6 @@
 package model.dbos;
 
-public class ProfSaude {
+public class ProfSaude implements EmpregadoClinica{
 	private int Id, cpf;
 	String idClass, Nome; 
 	public ProfSaude(int i, int c, String ic, String n){
@@ -26,6 +26,14 @@ public class ProfSaude {
 	}
 	public String toString(){
 		return this.Nome;
+	}
+	@Override
+	public boolean isFuncadmin() {
+		return false;
+	}
+	@Override
+	public boolean isProfsaude() {
+		return true;
 	}
 	
 }

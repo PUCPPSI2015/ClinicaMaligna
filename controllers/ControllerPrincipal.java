@@ -12,7 +12,10 @@ import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
 import model.Conexao;
+import model.ProfSaudeModel;
+import model.dbos.EmpregadoClinica;
 import views.JanelaPrincipal;
+import views.states.StateInicio;
 import views.states.StateLogin;
 import views.states.States;
 
@@ -23,7 +26,7 @@ public class ControllerPrincipal {
 	private static String id;
 	private static States states; 
 	private static boolean admin = false;
-	private static Object objLogado;
+	private static EmpregadoClinica objLogado = null;
 	
 	
 	private static JanelaPrincipal janela = new JanelaPrincipal();
@@ -45,7 +48,8 @@ public class ControllerPrincipal {
             public void run() {
             	janela.setVisible(true);
         		//deslogar();
-            	logar("teste");
+            	ProfSaudeModel.listaRefreshAll();
+            	logar(ProfSaudeModel.getOne(11));
             }
         });
 
@@ -57,16 +61,29 @@ public class ControllerPrincipal {
 	/*
 	 * metodos de logon e logoff
 	 * */
-	public static void logar(Object id_){
+	public static void logar(EmpregadoClinica id_){
+			if(id_ == null)return;
 			objLogado = id_;
 			logado = true;
 			janela.definirLogado();
 			janela.setTitle("Bem vindo: " + objLogado.toString());
-			//states.go("inicio");
-			states.go("agendamento");
+			
+			if(id_.isProfsaude()){
+				StateInicio.ativarProfSaude();
+				janela.ativarProfSaude();
+			}
+			else if(id_.isFuncadmin()){
+				StateInicio.ativarFuncadmin();
+				janela.ativarFuncadmin();
+			}
+				
+			
+			states.go("inicio");
+			//states.go("registro");
 	}
 	public static void deslogar(){
 			id = "";
+			objLogado = null;
 			logado = false;
 			janela.definirDeslogado();
 			states.go("login");
@@ -83,6 +100,18 @@ public class ControllerPrincipal {
 	}
 	
 	
+	public static EmpregadoClinica getObjLogado() {
+		return objLogado;
+	}
+
+
+
+	public static void setObjLogado(EmpregadoClinica objLogado) {
+		ControllerPrincipal.objLogado = objLogado;
+	}
+
+
+
 	/*
 	 * munca de states
 	 * */
@@ -109,6 +138,18 @@ public class ControllerPrincipal {
 		
 	}
 	
+	
+	public static void gritar(String oq, String titulo){
+		JOptionPane.showMessageDialog(janela, oq, titulo, JOptionPane.ERROR_MESSAGE);
+	}
+	public static void gritar(String oq){
+		JOptionPane.showMessageDialog(janela, oq);
+	}
+	public static int perguntar(String oq, String titulo){
+		return JOptionPane.showConfirmDialog(janela, oq, titulo, JOptionPane.OK_CANCEL_OPTION);
+	}
+
+
 
 	
 	

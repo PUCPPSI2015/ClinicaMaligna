@@ -106,11 +106,7 @@ public class ControllerProfSaude {
 		if( sab != null){
 			Disponibilidade disp = sab; 
 			state.setInOutEsp(disp.getDiaDaSemana(), disp.getInicio(), disp.getFim(),Especialidades.getOne(disp.getIdEspecialidade()), disp.getAtivoBool());
-		}
-		
-		;
-		
-		
+		};
 		
 		
 		

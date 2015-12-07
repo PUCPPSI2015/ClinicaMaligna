@@ -9,6 +9,8 @@ import java.util.Vector;
 
 import javax.swing.*;
 
+import model.dbos.EmpregadoClinica;
+import controllers.ControllerPrincipal;
 import views.JanelaPrincipal;
 
 /*
@@ -33,6 +35,7 @@ public class States {
 		adicionarState("funcionarios administrativos", new StateFuncAdmin(this.janela));
 		adicionarState("profissionais saude", new StateProfSaude(this.janela));
 		adicionarState("agendamento", new StateAgendamento(this.janela));
+		adicionarState("registro", new StateRegistro(this.janela));
 		
 		
 		
@@ -49,8 +52,20 @@ public class States {
 	
 	
 	public void go(String nome_){
+		EmpregadoClinica logado = ControllerPrincipal.getObjLogado(); 
+		if(logado != null){
+			if(logado.isFuncadmin()){
+				if(nome_.equals("registro")) return;
+			}else if(logado.isProfsaude()){
+				if(	(nome_.equals("funcionarios administrativos"))||
+					(nome_.equals("profissionais saude"))||
+					(nome_.equals("agendamento"))
+				  )
+					return;
+				
+			}
+		}
 		states.get(nome_).montar(); 
 		this.layout.show(janela.getAreaStates(), nome_);
-		
 	}
 }
