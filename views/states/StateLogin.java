@@ -103,7 +103,7 @@ public class StateLogin extends State{
 		btnLogar.addActionListener(ControllerLogin.loginAction(janela, this));
 
 		
-		
+		janela.getRootPane().setDefaultButton(btnLogar);
 		
 		
 

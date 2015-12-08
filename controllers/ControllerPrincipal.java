@@ -47,9 +47,7 @@ public class ControllerPrincipal {
 		SwingUtilities.invokeLater(new Runnable() {
             public void run() {
             	janela.setVisible(true);
-        		//deslogar();
-            	ProfSaudeModel.listaRefreshAll();
-            	logar(ProfSaudeModel.getOne(11));
+        		deslogar();
             }
         });
 
@@ -70,6 +68,7 @@ public class ControllerPrincipal {
 			
 			if(id_.isProfsaude()){
 				StateInicio.ativarProfSaude();
+				ControllerRegistro.logou();
 				janela.ativarProfSaude();
 			}
 			else if(id_.isFuncadmin()){
@@ -79,7 +78,7 @@ public class ControllerPrincipal {
 				
 			
 			states.go("inicio");
-			//states.go("registro");
+
 	}
 	public static void deslogar(){
 			id = "";

@@ -53,6 +53,11 @@ public class States {
 	
 	public void go(String nome_){
 		EmpregadoClinica logado = ControllerPrincipal.getObjLogado(); 
+		boolean isLogado = ControllerPrincipal.isLogado();
+		if(!isLogado && (!nome_.equals("login"))){ 
+			ControllerPrincipal.deslogar();
+			return;
+		}
 		if(logado != null){
 			if(logado.isFuncadmin()){
 				if(nome_.equals("registro")) return;

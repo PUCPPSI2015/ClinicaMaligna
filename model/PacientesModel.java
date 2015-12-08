@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 
 
+
 public class PacientesModel extends Model{
 	private static ArrayList<Paciente> pacientes = new ArrayList<Paciente>();
 	private static String tabelanome = "pacientes";
@@ -45,6 +46,35 @@ public class PacientesModel extends Model{
 				return esta;
 		}
 		return null;		
+	}
+	public static Paciente[] getPesquisa(String qual) {
+		listaRefreshPesquisa(qual);
+		Paciente[] retorno =  new Paciente[pacientes.size()];
+		pacientes.toArray(retorno);
+		return retorno;
+	}
+
+	public static void listaRefreshPesquisa(String qual) {
+		pacientes.clear();
+		
+		ResultSet rstExiste, rstExiste2, rstExiste3;
+		try {
+			rstExiste = myStm.executeQuery("select * from "+ tabelanome + " where Nome like '%" + qual + "%'");
+			while(rstExiste.next()){
+				pacientes.add(new Paciente(rstExiste.getInt("Id"), 
+						rstExiste.getInt("CEP"), 
+						rstExiste.getInt("Numero"), 
+						rstExiste.getString("Nome"),
+						rstExiste.getString("Senha"),
+						rstExiste.getString("Complemento"),
+						rstExiste.getInt("Disable")
+					)
+				);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static class Paciente{
@@ -115,6 +145,8 @@ public class PacientesModel extends Model{
 			return nome;
 		}
 	}
+
+	
 
 	
 }

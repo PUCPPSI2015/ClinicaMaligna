@@ -4,6 +4,8 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 
@@ -11,9 +13,11 @@ import java.util.ArrayList;
 
 
 
-import model.ConsultasModel.Consulta;
-import model.DisponibilidadesModel.Disponibilidade;
+import java.util.Calendar;
+
+import model.PacientesModel.Paciente;
 import model.harddata.Especialidades;
+import model.harddata.Especialidades.Especialidade;
 
 
 
@@ -22,12 +26,25 @@ import model.harddata.Especialidades;
 public class ConsultasModel extends Model{
 	private static ArrayList<Consulta> consultas = new ArrayList<Consulta>();
 	private static String tabelanome = "consultas";
+	private static SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
+	private static SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
+	private static SimpleDateFormat uf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private static Calendar cal = Calendar.getInstance();
 	
+	public static java.util.Date formatarCompleta(String sr){
+		try {
+			
+			return uf.parse(sr);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 	public static void listaRefresh() {
 		consultas.clear();
 		ResultSet rstExiste;
 		try {
-			rstExiste = myStm.executeQuery("select * from " + tabelanome);
+			rstExiste = myStm.executeQuery("select * from " + tabelanome + " order by Data ASC, Inicio ASC");
 			while(rstExiste.next()){
 				consultas.add(new Consulta(rstExiste.getInt("Id"), 
 											rstExiste.getInt("IdPaciente"), 
@@ -46,6 +63,37 @@ public class ConsultasModel extends Model{
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	public static Consulta[] getAll(int id) {
+		listaRefresh();
+		Consulta[] retorno = new Consulta[consultas.size()];
+		
+		if(consultas.size() > 0)//converter para array
+			for (int j = 0; j < consultas.size(); j++ ) {
+			
+				retorno[j] = consultas.get(j);
+			}
+		return retorno;	//retornar
+	}
+	public static Consulta[] getAllAtivas(int id) {
+		listaRefresh();
+		ArrayList<Consulta> estasconsultas = new ArrayList<Consulta>();
+		for (int key = 0; key < consultas.size(); key++ ) {
+			Consulta esta = consultas.get(key); 
+			if(esta.getAtivoBool()){
+					estasconsultas.add(esta);
+			}
+				
+		}
+		
+		Consulta[] retorno = new Consulta[estasconsultas.size()];
+		
+		if(estasconsultas.size() > 0)
+			for (int j = 0; j < estasconsultas.size(); j++ ) {
+			
+				retorno[j] = estasconsultas.get(j);
+			}
+		return retorno;	
 	}
 	public static Consulta getOne(int id) {
 		listaRefresh();
@@ -96,12 +144,117 @@ public class ConsultasModel extends Model{
 			}
 		return retorno;	
 	}
+	public static Consulta[] getByPac(int pac){
+		listaRefresh();
+		ArrayList<Consulta> estasconsultas = new ArrayList<Consulta>();
+		for (int key = 0; key < consultas.size(); key++ ) {
+			Consulta esta = consultas.get(key); 
+			if(esta.getIdPaciente() == pac){
+					estasconsultas.add(esta);
+			}
+				
+		}
+		
+		Consulta[] retorno = new Consulta[estasconsultas.size()];
+		
+		if(estasconsultas.size() > 0)
+			for (int j = 0; j < estasconsultas.size(); j++ ) {
+			
+				retorno[j] = estasconsultas.get(j);
+			}
+		return retorno;	
+	}
+	public static Consulta[] getAtivasPassadasByProf(int id) {
+		java.util.Date hoje = formatarCompleta(uf.format(cal.getTime())); //montar data de hoje com horario até os segundo
+		listaRefresh();
+		ArrayList<Consulta> estasconsultas = new ArrayList<Consulta>();
+		for (int key = 0; key < consultas.size(); key++ ) {   //procurar em todas as consultas
+			Consulta esta = consultas.get(key); 
+			Time horario = esta.getFim();
+			Date dia = esta.getData();
+			String shorario = df.format(horario);
+			String sdia = dt.format(dia);
+			java.util.Date daConsulta = formatarCompleta(sdia + " " + shorario);
+			int idprof = DisponibilidadesModel.getById(esta.getIdDisponibilidade()).getIdProfissional(); 
+			
+			
+			if	( esta.getAtivoBool() &&
+				 (idprof == id) &&
+				 (daConsulta.before(hoje))
+				){ //se for ativa, e id do profissional procurado e for antes da data de hoje
+					estasconsultas.add(esta); //adicionar
+			}
+				
+		}
+		
+		Consulta[] retorno = new Consulta[estasconsultas.size()];
+		
+		if(estasconsultas.size() > 0)//converter para array
+			for (int j = 0; j < estasconsultas.size(); j++ ) {
+			
+				retorno[j] = estasconsultas.get(j);
+			}
+		return retorno;	//retornar
+		
+		
+		
+
+	}
+	public static Consulta[] getAtivasFuturasByProf(int id) {
+		java.util.Date hoje = formatarCompleta(uf.format(cal.getTime())); //montar data de hoje com horario até os segundo
+		listaRefresh();
+		ArrayList<Consulta> estasconsultas = new ArrayList<Consulta>();
+		System.out.println("Hoje: " + uf.format(cal.getTime()));
+		for (int key = 0; key < consultas.size(); key++ ) {   //procurar em todas as consultas
+			Consulta esta = consultas.get(key); 
+			Time horario = esta.getFim();
+			Date dia = esta.getData();
+			String shorario = df.format(horario);
+			String sdia = dt.format(dia);
+			java.util.Date daConsulta = formatarCompleta(sdia + " " + shorario);
+			System.out.println("Dia: " + sdia + " " + shorario);
+			System.out.print("Ativa: ");
+			int idprof = DisponibilidadesModel.getById(esta.getIdDisponibilidade()).getIdProfissional(); 
+			
+			
+			if	( esta.getAtivoBool() &&
+				 (idprof == id) &&
+				 (daConsulta.after(hoje) || daConsulta.equals(hoje))
+				){ //se for ativa, e id do profissional procurado e for antes da data de hoje
+					estasconsultas.add(esta); //adicionar
+			}
+				
+		}
+		
+		Consulta[] retorno = new Consulta[estasconsultas.size()];
+		
+		if(estasconsultas.size() > 0)//converter para array
+			for (int j = 0; j < estasconsultas.size(); j++ ) {
+			
+				retorno[j] = estasconsultas.get(j);
+			}
+		return retorno;	//retornar
+
+		
+	}
 	public static void updateConsultaParcial(int id, Date d, Time i, Time f, int p, int dd){
 		
 		try {
 			myStm.executeUpdate("update "+ tabelanome + " " +
 					"set Data='" + d + "', Inicio='" + i + "', Fim='" + f+ "', IdPaciente='" + p + "', "+
 					"IdDisponibilidade='" + dd+ "' "+
+					"where Id=" + id + " ");
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	public static void updateConsultaMeta(int id, String observacoes, String Exames, String prescri, String recomendacoes){
+		
+		try {
+			myStm.executeUpdate("update "+ tabelanome + " " +
+					"set Observacoes='" + observacoes + "', PedidosDeExame='" + Exames + "', Prescricoes='" + prescri + "', Recomendacoes='" + recomendacoes + "' "+
 					"where Id=" + id + " ");
 			
 			
@@ -155,6 +308,19 @@ public class ConsultasModel extends Model{
 			e.printStackTrace();
 		}
 	}
+	
+	public static Consulta[] getPesquisaPac(String pesquisa) {
+		Paciente[] paciente = PacientesModel.getPesquisa(pesquisa);//pegar pacientes coma pesquisa
+		Consulta[] retorno = null;
+		for(int pa = 0; pa < paciente.length; pa++){//iterar em cada um deles
+			
+			retorno = getByPac(paciente[pa].getId());
+	
+		}
+		return retorno;
+		
+	}
+	
 	
 	
 	
@@ -276,6 +442,14 @@ public class ConsultasModel extends Model{
 		}
 		
 	}
+
+
+
+	
+
+
+	
+	
 
 
 

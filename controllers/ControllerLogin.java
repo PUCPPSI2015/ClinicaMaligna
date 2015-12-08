@@ -56,6 +56,8 @@ public class ControllerLogin extends ControllerState{
 		}
 		
 		public void actionPerformed(ActionEvent arg0) {
+			
+			if(ControllerPrincipal.isLogado())return;
 			ID = este.getId();
 			senha = este.getSenha();
 			
