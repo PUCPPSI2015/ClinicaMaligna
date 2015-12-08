@@ -26,6 +26,7 @@ public class DisponibilidadesModel  extends Model{
 				disponibilidades.add(new Disponibilidade(rstExiste.getInt("Id"), rstExiste.getInt("DiaDaSemana"), rstExiste.getInt("IdProfissional"), rstExiste.getInt("IdEspecialidade"), rstExiste.getTime("Inicio"), rstExiste.getTime("Fim"), rstExiste.getInt("ativo")));
 			}
 		} catch (SQLException e) {
+			ControllerPrincipal.gritar("Erro de conexão com o banco de dados", "O banco não está aqui");
 			e.printStackTrace();
 		}
 	}
@@ -57,6 +58,7 @@ public class DisponibilidadesModel  extends Model{
 					"values(" + disponibilidades[j].getAtivo() + "," + disponibilidades[j].getDiaDaSemana() + ",'" + df.format(disponibilidades[j].getInicio()) + "','" + df.format(disponibilidades[j].getFim()) + "'," + resultado + "," + disponibilidades[j].getIdEspecialidade() + ")");
 			}
 		} catch (SQLException e1) {
+			ControllerPrincipal.gritar("Erro de gravação no banco de dados", "Algo de errado não está certo");
 			e1.printStackTrace();
 		}
 	}
@@ -104,6 +106,7 @@ public class DisponibilidadesModel  extends Model{
 					
 				}
 		} catch (SQLException e1) {
+			ControllerPrincipal.gritar("Erro de gravação no banco de dados", "Algo de errado não está certo");
 			e1.printStackTrace();
 		}
 	}

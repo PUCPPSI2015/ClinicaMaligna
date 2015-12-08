@@ -23,84 +23,66 @@ import javax.swing.JTabbedPane;
 
 import controllers.*;
 
-
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import javax.swing.JLabel;
 
+public class JanelaPrincipal extends JFrame {
 
-
-
-public class JanelaPrincipal extends JFrame{
-	
 	/**
 	 * serial que eu nao sei pra queue serve
 	 */
 	private static final long serialVersionUID = 1L;
 
-	//variaveios de container
+	// variaveios de container
 	private Container cntForm;
-	
-	//variaveis de painel principal
+
+	// variaveis de painel principal
 	private JPanel pnlBotoes = new JPanel();
-	private FlowLayout flwBotoes = new FlowLayout(FlowLayout.LEFT); 
-	
-	//variaveis de painel de states
-	private JPanel areaStates = new JPanel(new CardLayout()); 
-	
-	
-	//variaveis de menu
-	private JButton mnuInicio  = new MeuBtn("Inicio"),
-					mnuAdm  = new MeuBtn("Funcionarios administrativos"),
-					mnuSaude  = new MeuBtn("Profissionais da saude"),
-					mnuAgConsultas = new MeuBtn("Agendamento de Consultas"),
-					mnuRgConsultas = new MeuBtn("Registro de Consultas"),
-					mnuSair  = new MeuBtn("Sair");
+	private FlowLayout flwBotoes = new FlowLayout(FlowLayout.LEFT);
 
-	
+	// variaveis de painel de states
+	private JPanel areaStates = new JPanel(new CardLayout());
 
-						
-	
-	
-	
-	public JanelaPrincipal(){
-		
-		//montando janela
+	// variaveis de menu
+	private JButton mnuInicio = new MeuBtn("Inicio"), mnuAdm = new MeuBtn(
+			"Funcionarios administrativos"), mnuSaude = new MeuBtn(
+			"Profissionais da saude"), mnuAgConsultas = new MeuBtn(
+			"Agendamento de Consultas"), mnuRgConsultas = new MeuBtn(
+			"Registro de Consultas"), mnuSair = new MeuBtn("Sair");
+
+	public JanelaPrincipal() {
+
+		// montando janela
 		super("Clinica maligna");
-		setIconImage(Toolkit.getDefaultToolkit().getImage(JanelaPrincipal.class.getResource("/material/icon.png")));
-		this.setSize(1200,800);
+		setIconImage(Toolkit.getDefaultToolkit().getImage(
+				JanelaPrincipal.class.getResource("/material/icon.png")));
+		this.setSize(1200, 800);
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.addWindowListener(fechar());
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		cntForm = this.getContentPane();
-		cntForm.setLayout (new BorderLayout());
-	
-	
-	
-		
-		//montando paineis
-		pnlBotoes.setLayout (flwBotoes);
-		cntForm.add (pnlBotoes,  BorderLayout.NORTH);
-		
-		
-		areaStates.setBackground(new Color(255, 0, 0));
-		cntForm.add (areaStates,  BorderLayout.CENTER);
-		
+		cntForm.setLayout(new BorderLayout());
 
-		
-		
-		
-		
-		
-		
-		//montando os botoes
+		// montando paineis
+		pnlBotoes.setLayout(flwBotoes);
+		cntForm.add(pnlBotoes, BorderLayout.NORTH);
+
+		areaStates.setBackground(new Color(255, 0, 0));
+		cntForm.add(areaStates, BorderLayout.CENTER);
+
+		// montando os botoes
 		mnuInicio.addActionListener(ControllerPrincipal.mudador("inicio"));
-		mnuAdm.addActionListener(ControllerPrincipal.mudador("funcionarios administrativos"));
-		mnuSaude.addActionListener(ControllerPrincipal.mudador("profissionais saude"));
-		mnuAgConsultas.addActionListener(ControllerPrincipal.mudador("agendamento"));
-		mnuRgConsultas.addActionListener(ControllerPrincipal.mudador("registro"));
+		mnuAdm.addActionListener(ControllerPrincipal
+				.mudador("funcionarios administrativos"));
+		mnuSaude.addActionListener(ControllerPrincipal
+				.mudador("profissionais saude"));
+		mnuAgConsultas.addActionListener(ControllerPrincipal
+				.mudador("agendamento"));
+		mnuRgConsultas.addActionListener(ControllerPrincipal
+				.mudador("registro"));
 		mnuSair.addActionListener(ControllerPrincipal.mudador("sair"));
-		
+
 		pnlBotoes.add(mnuInicio);
 		pnlBotoes.add(mnuAdm);
 		pnlBotoes.add(mnuSaude);
@@ -108,74 +90,71 @@ public class JanelaPrincipal extends JFrame{
 		pnlBotoes.add(mnuRgConsultas);
 		pnlBotoes.add(mnuSair);
 		pnlBotoes.setBackground(Color.WHITE);
-		
-		
-		
-		//pack
+
+		// pack
 		this.pack();
-		
-		
+
 	}
+
 	/*
 	 * inner class meu btn
 	 */
-	private class MeuBtn extends JButton{
+	private class MeuBtn extends JButton {
 		private Color hoverBackgroundColor;
-        private Color pressedBackgroundColor;
+		private Color pressedBackgroundColor;
 
-		public MeuBtn(String nome){
+		public MeuBtn(String nome) {
 			super(nome);
 			this.setBackground(new Color(255, 255, 255));
 			this.setForeground(new Color(255, 0, 0));
 			this.setBorderPainted(false);
 		}
 	}
-	
-	
+
 	/*
 	 * operacoes coma janela
-	 * */
-	private FechamentoDeJanela fechar(){
+	 */
+	private FechamentoDeJanela fechar() {
 		return new FechamentoDeJanela();
 	}
-	
-	private class FechamentoDeJanela extends WindowAdapter{
-		public void windowClosing (WindowEvent e)
-		{
+
+	private class FechamentoDeJanela extends WindowAdapter {
+		public void windowClosing(WindowEvent e) {
 			System.exit(0);
 		}
 	}
-	
+
 	public void definirLogado() {
 		pnlBotoes.setVisible(true);
 
-		
 	}
+
 	public void definirDeslogado() {
 		pnlBotoes.setVisible(false);
 
-		
 	}
-	
-	
+
 	/*
 	 * relacionada a area de states
-	 * */
-	public JPanel getAreaStates(){
+	 */
+	public JPanel getAreaStates() {
 		return areaStates;
 	}
-	public void limparArea(){
-		areaStates.removeAll(); 
+
+	public void limparArea() {
+		areaStates.removeAll();
 		areaStates.updateUI();
 	}
+
 	public void ativarProfSaude() {
-		 mnuInicio.setVisible(true);
-		 mnuAdm.setVisible(false);
-		 mnuSaude.setVisible(false);
-		 mnuAgConsultas.setVisible(false);
+		mnuInicio.setVisible(true);
+		mnuAdm.setVisible(false);
+		mnuSaude.setVisible(false);
+		mnuAgConsultas.setVisible(false);
 		mnuRgConsultas.setVisible(true);
 		mnuSair.setVisible(true);
 	}
+
 	public void ativarFuncadmin() {
 		mnuInicio.setVisible(true);
 		mnuAdm.setVisible(true);
@@ -184,7 +163,5 @@ public class JanelaPrincipal extends JFrame{
 		mnuRgConsultas.setVisible(false);
 		mnuSair.setVisible(true);
 	}
-	
-	
 
 }

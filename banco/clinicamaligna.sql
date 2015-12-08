@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: 08-Dez-2015 às 04:20
+-- Generation Time: 08-Dez-2015 às 21:16
 -- Versão do servidor: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `acesso` (
 `Id` int(11) NOT NULL,
   `Login` varchar(50) COLLATE latin1_general_ci DEFAULT NULL,
   `Senha` varchar(10) COLLATE latin1_general_ci DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=92 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 --
 -- Extraindo dados da tabela `acesso`
@@ -40,7 +40,7 @@ INSERT INTO `acesso` (`Id`, `Login`, `Senha`) VALUES
 (4, '17', 'polonia'),
 (23, '23', '5555'),
 (28, '16', '5568'),
-(31, '25', '123456'),
+(31, '25', 'wAhX'),
 (47, 'm10', 'orta'),
 (48, 'c551-pr', 'orta'),
 (49, 'm11', 'RvT9'),
@@ -53,7 +53,23 @@ INSERT INTO `acesso` (`Id`, `Login`, `Senha`) VALUES
 (56, 'c52589-rj', 'LlsL'),
 (77, '26', '8OHy'),
 (78, 'm15', 'dsadsdaddd'),
-(79, 'cdsadsad-dsad', 'dsadsdaddd');
+(79, 'c5258s9-rj', 'dsadsdaddd'),
+(85, 'm16', 'WNN9'),
+(86, 'c525291911165/sp', 'WNN9'),
+(87, 'm17', 'sadas'),
+(88, 'cadf-rj', 'sadas'),
+(89, 'm18', 'PRONA 5656'),
+(90, 'c5656-so', 'PRONA 5656'),
+(91, 'm19', '8SxC'),
+(92, 'c545-pr', '8SxC'),
+(93, 'm20', '8x7o'),
+(94, 'cdasds-pr', '8x7o'),
+(95, 'm21', 'pzrx'),
+(96, 'c85786-sd', 'pzrx'),
+(97, 'm22', 'CXiM'),
+(98, 'c2565154-mg', 'CXiM'),
+(99, 'm23', '5161'),
+(100, 'c52589-mr', '5161');
 
 -- --------------------------------------------------------
 
@@ -93,7 +109,7 @@ CREATE TABLE IF NOT EXISTS `consultas` (
   `Prescricoes` varchar(1024) COLLATE latin1_general_ci DEFAULT NULL,
   `Recomendacoes` varchar(1024) COLLATE latin1_general_ci DEFAULT NULL,
   `ativo` tinyint(3) DEFAULT '1'
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 --
 -- Extraindo dados da tabela `consultas`
@@ -101,19 +117,20 @@ CREATE TABLE IF NOT EXISTS `consultas` (
 
 INSERT INTO `consultas` (`Id`, `Data`, `Inicio`, `Fim`, `IdPaciente`, `IdDisponibilidade`, `Observacoes`, `PedidosDeExame`, `Prescricoes`, `Recomendacoes`, `ativo`) VALUES
 (1, '2015-12-22', '09:00:00', '13:00:00', 4, 33, 'bolo', 'teste', 'remedio', 'tomar liquido alcolico', 0),
-(2, '2015-12-25', '12:00:00', '13:00:00', 8, 36, 'teste', 'dsad', 'sdasds', 'dasd', 1),
-(4, '2015-12-08', '10:19:00', '18:09:00', 8, 33, NULL, NULL, NULL, NULL, 1),
+(2, '2015-12-25', '12:00:00', '13:00:00', 8, 36, 'teste', 'dsad', 'sdasds', 'dasd', 0),
+(4, '2015-12-08', '10:19:00', '18:09:00', 8, 33, NULL, NULL, NULL, NULL, 0),
 (9, '2015-12-28', '08:00:00', '13:00:00', 7, 25, NULL, NULL, NULL, NULL, 0),
 (11, '2015-12-21', '03:00:00', '13:00:00', 12, 53, NULL, NULL, NULL, NULL, 1),
-(13, '2015-12-30', '06:00:00', '21:00:00', 10, 27, NULL, NULL, NULL, NULL, 0),
+(13, '2015-12-30', '06:00:00', '21:00:00', 7, 27, NULL, NULL, NULL, NULL, 0),
 (15, '2015-12-22', '09:09:00', '16:19:00', 7, 33, NULL, NULL, NULL, NULL, 1),
 (16, '2015-12-25', '11:00:00', '13:00:00', 9, 29, NULL, NULL, NULL, NULL, 1),
 (17, '2015-12-25', '10:00:00', '11:00:00', 7, 29, NULL, NULL, NULL, NULL, 0),
 (18, '2015-12-20', '03:00:00', '05:00:00', 7, 38, NULL, NULL, NULL, NULL, 0),
 (19, '2015-12-20', '05:00:00', '06:00:00', 9, 38, NULL, NULL, NULL, NULL, 0),
 (20, '2015-12-20', '03:00:00', '06:00:00', 4, 45, NULL, NULL, NULL, NULL, 0),
-(21, '2015-12-02', '12:00:00', '13:00:00', 8, 34, NULL, NULL, NULL, NULL, 1),
-(22, '2015-12-02', '13:00:00', '14:00:00', 7, 34, 'Diagnosticada tumor no mindinho;\nVer se é maligno', 'Ultrassom da franja;\r\nexame de fluidos nasais', 'Remedio anti derrapante - 4 gotas ao mes.', 'Beber muito liquido;', 1);
+(21, '2015-12-02', '12:00:00', '13:00:00', 8, 34, 'sdasdasdA', 'SADSAD', 'dASD', 'ASDASD', 1),
+(22, '2015-12-02', '13:00:00', '14:00:00', 7, 34, 'Diagnosticada tumor no mindinho;\nVer se é maligno', 'Ultrassom da franja;\r\nexame de fluidos nasais', 'Remedio anti derrapante - 4 gotas ao mes.', 'Beber muito liquido;', 1),
+(24, '2015-12-23', '09:00:00', '10:00:00', 7, 118, NULL, NULL, NULL, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -128,8 +145,8 @@ CREATE TABLE IF NOT EXISTS `disponibilidades` (
   `Fim` time DEFAULT NULL,
   `IdProfissional` int(11) DEFAULT NULL,
   `IdEspecialidade` int(11) DEFAULT NULL,
-  `ativo` tinyint(3) DEFAULT '1'
-) ENGINE=InnoDB AUTO_INCREMENT=108 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+  `ativo` tinyint(3) DEFAULT '0'
+) ENGINE=InnoDB AUTO_INCREMENT=122 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 --
 -- Extraindo dados da tabela `disponibilidades`
@@ -164,20 +181,76 @@ INSERT INTO `disponibilidades` (`Id`, `DiaDaSemana`, `Inicio`, `Fim`, `IdProfiss
 (49, 5, '10:00:00', '16:00:00', 13, 15, 1),
 (50, 6, '00:00:00', '00:00:00', 13, 3, 0),
 (51, 7, '00:00:00', '00:00:00', 13, 3, 0),
-(52, 1, '00:00:00', '00:00:00', 14, 1, 0),
-(53, 2, '03:00:00', '13:00:00', 14, 1, 1),
-(54, 3, '00:00:00', '00:00:00', 14, 1, 0),
-(55, 4, '07:00:00', '09:00:00', 14, 1, 1),
-(56, 5, '00:00:00', '00:00:00', 14, 1, 0),
-(57, 6, '00:00:00', '00:00:00', 14, 1, 0),
-(58, 7, '00:00:00', '00:00:00', 14, 1, 0),
-(59, 1, '00:00:00', '00:00:00', 15, 1, 0),
-(60, 2, '01:00:00', '04:00:00', 15, 1, 1),
-(61, 3, '00:00:00', '00:00:00', 15, 1, 0),
-(62, 4, '00:00:00', '00:00:00', 15, 1, 0),
-(63, 5, '00:00:00', '00:00:00', 15, 1, 0),
-(64, 6, '16:00:00', '20:00:00', 15, 1, 1),
-(65, 7, '00:00:00', '00:00:00', 15, 1, 0);
+(52, 1, '00:00:00', '00:00:00', 14, 3, 0),
+(53, 2, '03:00:00', '13:00:00', 14, 3, 1),
+(54, 3, '00:00:00', '00:00:00', 14, 3, 0),
+(55, 4, '07:00:00', '09:00:00', 14, 3, 1),
+(56, 5, '00:00:00', '00:00:00', 14, 3, 0),
+(57, 6, '00:00:00', '00:00:00', 14, 3, 0),
+(58, 7, '00:00:00', '00:00:00', 14, 3, 0),
+(59, 1, '00:00:00', '00:00:00', 15, 3, 0),
+(60, 2, '01:00:00', '04:00:00', 15, 3, 1),
+(61, 3, '00:00:00', '00:00:00', 15, 3, 0),
+(62, 4, '00:00:00', '00:00:00', 15, 3, 0),
+(63, 5, '00:00:00', '00:00:00', 15, 3, 0),
+(64, 6, '16:00:00', '20:00:00', 15, 3, 1),
+(65, 7, '00:00:00', '00:00:00', 15, 3, 0),
+(66, 1, '00:00:00', '00:00:00', 16, 66, 0),
+(67, 2, '00:00:00', '00:00:00', 16, 66, 0),
+(68, 3, '00:00:00', '00:00:00', 16, 66, 0),
+(69, 4, '00:00:00', '00:00:00', 16, 66, 0),
+(70, 5, '00:00:00', '00:00:00', 16, 66, 0),
+(71, 6, '00:00:00', '00:00:00', 16, 66, 0),
+(72, 7, '00:00:00', '00:00:00', 16, 66, 0),
+(73, 1, '00:00:00', '00:00:00', 17, 1, 0),
+(74, 2, '00:00:00', '00:00:00', 17, 1, 0),
+(75, 3, '00:00:00', '00:00:00', 17, 1, 0),
+(76, 4, '00:00:00', '00:00:00', 17, 1, 0),
+(77, 5, '00:00:00', '00:00:00', 17, 1, 0),
+(78, 6, '00:00:00', '00:00:00', 17, 1, 0),
+(79, 7, '00:00:00', '00:00:00', 17, 1, 0),
+(80, 1, '00:00:00', '00:00:00', 18, 6, 0),
+(81, 2, '00:00:00', '00:00:00', 18, 6, 1),
+(82, 3, '00:00:00', '00:00:00', 18, 6, 1),
+(83, 4, '00:00:00', '00:00:00', 18, 6, 0),
+(84, 5, '00:00:00', '00:00:00', 18, 6, 0),
+(85, 6, '00:00:00', '00:00:00', 18, 6, 0),
+(86, 7, '00:00:00', '00:00:00', 18, 6, 0),
+(87, 1, '06:00:00', '13:00:00', 19, 33, 1),
+(88, 2, '00:00:00', '02:00:00', 19, 18, 1),
+(89, 3, '00:00:00', '00:00:00', 19, 6, 0),
+(90, 4, '00:00:00', '00:00:00', 19, 6, 0),
+(91, 5, '00:00:00', '11:00:00', 19, 39, 1),
+(92, 6, '00:00:00', '00:00:00', 19, 6, 0),
+(93, 7, '00:00:00', '00:00:00', 19, 6, 0),
+(94, 1, '00:00:00', '00:00:00', 20, 67, 0),
+(95, 2, '00:00:00', '00:00:00', 20, 67, 0),
+(96, 3, '00:00:00', '00:00:00', 20, 67, 0),
+(97, 4, '00:00:00', '00:00:00', 20, 67, 0),
+(98, 5, '08:00:00', '14:00:00', 20, 67, 1),
+(99, 6, '00:00:00', '00:00:00', 20, 67, 0),
+(100, 7, '00:00:00', '00:00:00', 20, 67, 0),
+(101, 1, '08:00:00', '18:00:00', 21, 1, 1),
+(102, 2, '00:00:00', '07:00:00', 21, 1, 0),
+(103, 3, '08:00:00', '12:00:00', 21, 1, 1),
+(104, 4, '10:00:00', '19:00:00', 21, 1, 1),
+(105, 5, '13:00:00', '18:00:00', 21, 1, 1),
+(106, 6, '10:00:00', '18:00:00', 21, 1, 1),
+(107, 7, '08:00:00', '15:00:00', 21, 1, 1),
+(108, 1, '00:00:00', '00:00:00', 22, 1, 0),
+(109, 2, '08:00:00', '16:00:00', 22, 1, 1),
+(110, 3, '00:00:00', '00:00:00', 22, 1, 0),
+(111, 4, '00:00:00', '00:00:00', 22, 1, 0),
+(112, 5, '00:00:00', '00:00:00', 22, 1, 0),
+(113, 6, '08:00:00', '16:00:00', 22, 1, 1),
+(114, 7, '00:00:00', '00:00:00', 22, 1, 0),
+(115, 1, '00:00:00', '00:00:00', 23, 5, 0),
+(116, 2, '00:00:00', '00:00:00', 23, 5, 0),
+(117, 3, '00:00:00', '00:00:00', 23, 14, 0),
+(118, 4, '09:00:00', '17:00:00', 23, 5, 1),
+(119, 5, '00:00:00', '00:00:00', 23, 5, 0),
+(120, 6, '00:00:00', '00:00:00', 23, 5, 0),
+(121, 7, '00:00:00', '00:00:00', 23, 5, 0);
 
 -- --------------------------------------------------------
 
@@ -327,7 +400,6 @@ CREATE TABLE IF NOT EXISTS `especializacoes` (
 --
 
 INSERT INTO `especializacoes` (`IdProfissional`, `IdEspecialidade`) VALUES
-(14, 3),
 (11, 2),
 (11, 17),
 (11, 30),
@@ -336,18 +408,44 @@ INSERT INTO `especializacoes` (`IdProfissional`, `IdEspecialidade`) VALUES
 (11, 38),
 (11, 47),
 (11, 51),
-(10, 3),
-(10, 5),
-(10, 15),
+(11, 11),
+(14, 3),
 (13, 3),
 (13, 5),
 (13, 15),
+(12, 3),
+(12, 5),
+(12, 15),
+(16, 66),
+(17, 14),
+(17, 11),
+(10, 3),
+(10, 5),
+(10, 15),
+(19, 6),
+(19, 18),
+(19, 33),
+(19, 39),
+(18, 6),
+(21, 1),
+(21, 3),
+(21, 20),
+(21, 35),
+(21, 48),
+(21, 47),
+(21, 46),
+(21, 45),
+(21, 44),
+(21, 52),
+(21, 51),
+(22, 116),
 (15, 3),
 (15, 5),
 (15, 15),
-(12, 3),
-(12, 5),
-(12, 15);
+(23, 5),
+(23, 14),
+(20, 67),
+(20, 62);
 
 -- --------------------------------------------------------
 
@@ -359,7 +457,7 @@ CREATE TABLE IF NOT EXISTS `funcionarios` (
 `Id` int(11) NOT NULL,
   `Cargo` int(11) DEFAULT NULL,
   `Nome` varchar(50) COLLATE latin1_general_ci DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 --
 -- Extraindo dados da tabela `funcionarios`
@@ -369,8 +467,8 @@ INSERT INTO `funcionarios` (`Id`, `Cargo`, `Nome`) VALUES
 (16, 2, 'Joselita silva'),
 (17, 1, 'adolf hitler'),
 (23, 2, 'Creuza'),
-(25, 3, 'Abigobaldo '),
-(26, 3, 'teste');
+(25, 1, 'Abigobaldo'),
+(26, 2, 'Analita souza');
 
 -- --------------------------------------------------------
 
@@ -408,23 +506,31 @@ INSERT INTO `pacientes` (`Id`, `Nome`, `Senha`, `CEP`, `Numero`, `Complemento`, 
 
 CREATE TABLE IF NOT EXISTS `profissionaissaude` (
 `Id` int(11) NOT NULL,
-  `CPF` int(11) DEFAULT NULL,
+  `CPF` bigint(12) DEFAULT NULL,
   `IdClasse` varchar(15) COLLATE latin1_general_ci DEFAULT NULL,
   `Nome` varchar(55) COLLATE latin1_general_ci DEFAULT NULL,
   `ativo` tinyint(3) DEFAULT '1' COMMENT 'se está tivo ou não'
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 --
 -- Extraindo dados da tabela `profissionaissaude`
 --
 
 INSERT INTO `profissionaissaude` (`Id`, `CPF`, `IdClasse`, `Nome`, `ativo`) VALUES
-(10, 252525, '551-pr', 'garcia da orta', 1),
-(11, 656567, '2255225252-sp', 'Osvaldo Cruz ', 1),
-(12, 552525, '245-sp', 'Franz anton mesme', 1),
-(13, 5645, '55478-sp', 'carlos chagas', 1),
-(14, 562, '52589-rj', 'Teste da silva', 1),
-(15, 562562, 'dsadsad-dsad', 'Rodolfino', 1);
+(10, 40812695807, '551-pr', 'Garcia da Orta', 1),
+(11, 40812695800, '2255225252-sp', 'Osvaldo Cruz ', 1),
+(12, 85224656958, '245-sp', 'Franz Anton Mesme', 1),
+(13, 85855412658, '55478-sp', 'Carlos Chagas', 1),
+(14, 56264566645, '52589-rj', 'Teste da silva', 1),
+(15, 40812695802, '5258s9-rj', 'Rodolfino', 1),
+(16, 58495275401, '525291911165/sp', 'Drauzio Varela', 1),
+(17, 42585465812, 'adf-rj', 'Adolfo Lutz', 1),
+(18, 53842859614, '5656-so', 'Enéas Ferreira Carneiro', 1),
+(19, 25845695841, '545-pr', 'Bernardino Ramazzini', 1),
+(20, 56984575158, 'dasds-pr', 'Juscelino Kubitschek', 1),
+(21, 25485614744, '85786-sd', 'Adib Jatene ', 1),
+(22, 26845825695, '2565154-mg', 'Vital Brazil', 1),
+(23, 25645874511, '52589-mr', 'Moacyr Scliar', 1);
 
 -- --------------------------------------------------------
 
@@ -575,7 +681,7 @@ ALTER TABLE `tiposdetelefone`
 -- AUTO_INCREMENT for table `acesso`
 --
 ALTER TABLE `acesso`
-MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=92;
+MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=101;
 --
 -- AUTO_INCREMENT for table `cargos`
 --
@@ -585,12 +691,12 @@ MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 -- AUTO_INCREMENT for table `consultas`
 --
 ALTER TABLE `consultas`
-MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=23;
+MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=25;
 --
 -- AUTO_INCREMENT for table `disponibilidades`
 --
 ALTER TABLE `disponibilidades`
-MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=108;
+MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=122;
 --
 -- AUTO_INCREMENT for table `especialidades`
 --
@@ -600,7 +706,7 @@ MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=135;
 -- AUTO_INCREMENT for table `funcionarios`
 --
 ALTER TABLE `funcionarios`
-MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=27;
+MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=32;
 --
 -- AUTO_INCREMENT for table `pacientes`
 --
@@ -610,7 +716,7 @@ MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=13;
 -- AUTO_INCREMENT for table `profissionaissaude`
 --
 ALTER TABLE `profissionaissaude`
-MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=22;
+MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=24;
 --
 -- AUTO_INCREMENT for table `profissoes`
 --

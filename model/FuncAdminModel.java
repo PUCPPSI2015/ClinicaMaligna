@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-
+import controllers.ControllerPrincipal;
 
 
 
@@ -35,6 +35,7 @@ public class FuncAdminModel extends Model{
 				funcionarios.add(new FuncAdmin(rstExiste.getInt("Id") ,rstExiste.getInt("Cargo"), rstExiste.getString("Nome")));
 			}
 		} catch (SQLException e) {
+			ControllerPrincipal.gritar("Erro de conexão com o banco de dados", "O banco não está aqui");
 			e.printStackTrace();
 		}
 		
@@ -77,6 +78,7 @@ public class FuncAdminModel extends Model{
 	        //atualiza
 	        listaRefreshAll();
 		} catch(Exception e) {
+			ControllerPrincipal.gritar("Erro de gravação no banco de dados", "Algo de errado não está certo");
 			e.printStackTrace();
 		}
 		
@@ -96,7 +98,7 @@ public class FuncAdminModel extends Model{
 			myStm.executeUpdate(updeitaa);
 			listaRefreshAll();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			ControllerPrincipal.gritar("Erro de gravação no banco de dados", "Algo de errado não está certo");
 			e.printStackTrace();
 		}
 	}	
@@ -111,7 +113,7 @@ public class FuncAdminModel extends Model{
 			myStm.executeUpdate(deletaa);
 			listaRefreshAll();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			ControllerPrincipal.gritar("Erro de exclusao no banco de dados", "Algo de errado não está certo");
 			e.printStackTrace();
 		}
 	}	
@@ -137,6 +139,7 @@ public class FuncAdminModel extends Model{
 				funcionarios.add(new FuncAdmin(rstExiste.getInt("Id") ,rstExiste.getInt("Cargo"), rstExiste.getString("Nome")));
 			}
 		} catch (SQLException e) {
+			ControllerPrincipal.gritar("Erro de conexão com o banco de dados", "O banco não está aqui");
 			e.printStackTrace();
 		}
 		

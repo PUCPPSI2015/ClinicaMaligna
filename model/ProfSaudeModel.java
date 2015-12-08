@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 
 
+
 import com.mysql.jdbc.Statement;
 
 import controllers.ControllerPrincipal;
@@ -42,12 +43,13 @@ public class ProfSaudeModel extends Model{
 		try {
 			rstExiste = myStm.executeQuery("select * from " + tabelanome);
 			while(rstExiste.next()){
-				ProfSaude este = new ProfSaude(rstExiste.getInt("Id") , rstExiste.getInt("CPF"), rstExiste.getString("IdClasse"), rstExiste.getString("Nome") );
+				ProfSaude este = new ProfSaude(rstExiste.getInt("Id") , rstExiste.getLong("CPF"), rstExiste.getString("IdClasse"), rstExiste.getString("Nome") );
 				int ativo = rstExiste.getInt("ativo");
 				if(ativo != 0)
 					profissionais.add(este);
 			}
 		} catch (SQLException e) {
+			ControllerPrincipal.gritar("Erro de conexão com o banco de dados", "O banco não está aqui");
 			e.printStackTrace();
 		}
 	}
@@ -71,7 +73,46 @@ public class ProfSaudeModel extends Model{
 		}
 		return null;
 	}
-	
+	public static boolean existeByIdCpf(long cpf, int idDele){
+		listaRefreshAll();
+		for(int i = 0; i < profissionais.size(); i++){
+			ProfSaude este = profissionais.get(i);
+			if((este.getCpf() == cpf) && (este.getId() != idDele)){
+				return true;
+			}
+		}
+		return false;
+	}
+	public static boolean existeByCpf(long cpf){
+		listaRefreshAll();
+		for(int i = 0; i < profissionais.size(); i++){
+			ProfSaude este = profissionais.get(i);
+			if(este.getCpf() == cpf){
+				return true;
+			}
+		}
+		return false;
+	}
+	public static boolean existeByIdClasse(String idClasse, int idDele) {
+		listaRefreshAll();
+		for(int i = 0; i < profissionais.size(); i++){
+			ProfSaude este = profissionais.get(i);
+			if((este.getIdClasse().equals(idClasse)) && (este.getId() != idDele)){
+				return true;
+			}
+		}
+		return false;
+	}
+	public static boolean existeByClasse(String idClasse) {
+		listaRefreshAll();
+		for(int i = 0; i < profissionais.size(); i++){
+			ProfSaude este = profissionais.get(i);
+			if(este.getIdClasse().equals(idClasse)){
+				return true;
+			}
+		}
+		return false;
+	}
 	public static void insertProf(String nome, String cpf, String senha, String idClasse, int[] especializacoes, Disponibilidade[] disponibilidades){
 		try {
 			ResultSet rstExiste;
@@ -127,13 +168,14 @@ public class ProfSaudeModel extends Model{
 			
 			
 		} catch(Exception e) {
+			ControllerPrincipal.gritar("Erro de gravação no banco de dados", "Algo de errado não está certo");
 			e.printStackTrace();
 		}
 	}
-	public static void updateProf(int id, String nome, String senha, String cpf, String idClasseAntiga, String idClasse, int[] especializacoes, Disponibilidade[] alteradas){
+	public static void updateProf(int id, String nome, String senha, long cpf, String idClasseAntiga, String idClasse, int[] especializacoes, Disponibilidade[] alteradas){
 		ResultSet rstExiste;
 		String updeitap = 	"update "+ tabelanome + " " + 
-		"set Nome='" + nome + "',CPF='" + cpf + "',IdClasse='" + idClasse + "' "+ 
+		"set Nome='" + nome + "',CPF=" + cpf + ",IdClasse='" + idClasse + "' "+ 
 		"where Id=" + id + "";
 		
 		
@@ -165,6 +207,7 @@ public class ProfSaudeModel extends Model{
 					"values(" + especializacoes[i] + "," + id + ")");
 			}
 		} catch (SQLException e1) {
+			ControllerPrincipal.gritar("Erro de exclusao no banco de dados", "Algo de errado não está certo");
 			e1.printStackTrace();
 		}
 		
@@ -210,6 +253,7 @@ public class ProfSaudeModel extends Model{
 			myStm.executeUpdate(updeitaap);
 			listaRefreshAll();
 		} catch (SQLException e) {
+			ControllerPrincipal.gritar("Erro de gravação no banco de dados", "Algo de errado não está certo");
 			e.printStackTrace();
 		}
 	}
@@ -233,6 +277,7 @@ public class ProfSaudeModel extends Model{
 			myStm.executeUpdate(deletaf);
 			listaRefreshAll();
 		} catch (SQLException e) {
+			ControllerPrincipal.gritar("Erro de exclusao no banco de dados", "Algo de errado não está certo");
 			e.printStackTrace();
 		}
 	}
@@ -245,6 +290,7 @@ public class ProfSaudeModel extends Model{
 			myStm.executeUpdate(inativaf);
 			listaRefreshAll();
 		} catch (SQLException e) {
+			ControllerPrincipal.gritar("Erro de gravação no banco de dados", "Algo de errado não está certo");
 			e.printStackTrace();
 		}
 	}
@@ -264,29 +310,14 @@ public class ProfSaudeModel extends Model{
 		try {
 			rstExiste = myStm.executeQuery("select * from "+ tabelanome + " where Nome like '%" + qual + "%' or IdClasse like '%" + qual + "%'");
 			while(rstExiste.next()){
-				profissionais.add(new ProfSaude(rstExiste.getInt("Id") , rstExiste.getInt("CPF"), rstExiste.getString("IdClasse"), rstExiste.getString("Nome") ));
-			}
-			//pesquizar por especializacoes
-			rstExiste = myStm.executeQuery("select * from especialidades where Nome like '%" + qual + "%'");
-			int idesp;
-			int idProf;
-			while(rstExiste.next()){
-				idesp = rstExiste.getInt("Id");
-				System.out.println("select * from especializacoes where IdEspecialidade=" + idesp + "");
-				rstExiste2 = myStm.executeQuery("select * from especializacoes where IdEspecialidade=" + idesp  + "");
-				
-				while(rstExiste2.next()){
-					idProf = rstExiste2.getInt("IdProfissional");
-					rstExiste3 = myStm.executeQuery("select * from "+ tabelanome + " where Id=" + idProf + "");
-					while(rstExiste3.next()){
-						profissionais.add(new ProfSaude(rstExiste3.getInt("Id") , rstExiste3.getInt("CPF"), rstExiste3.getString("IdClasse"), rstExiste3.getString("Nome") ));
-					}
-				}
+				profissionais.add(new ProfSaude(rstExiste.getInt("Id") , rstExiste.getLong("CPF"), rstExiste.getString("IdClasse"), rstExiste.getString("Nome") ));
 			}
 		} catch (SQLException e) {
+			ControllerPrincipal.gritar("Erro de conexão com o banco de dados", "O banco não está aqui");
 			e.printStackTrace();
 		}
 	}
+	
 
 
 }

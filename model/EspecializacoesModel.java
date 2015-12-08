@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import model.harddata.Especialidades.Especialidade;
-
+import controllers.ControllerPrincipal;
 
 
 public class EspecializacoesModel extends Model{
@@ -22,6 +22,7 @@ public class EspecializacoesModel extends Model{
 				especializacoes.add(new Especializacao(rstExiste.getInt("IdProfissional") ,rstExiste.getInt("IdEspecialidade")));
 			}
 		} catch (SQLException e) {
+			ControllerPrincipal.gritar("Erro de conexão com o banco de dados", "O banco não está aqui");
 			e.printStackTrace();
 		}
 	}

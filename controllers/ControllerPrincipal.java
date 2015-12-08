@@ -1,7 +1,5 @@
 package controllers;
 
-
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -21,137 +19,160 @@ import views.states.States;
 
 @SuppressWarnings("unused")
 public class ControllerPrincipal {
-	
-	private static boolean logado = true; 
+
+	private static boolean logado = true;
 	private static String id;
-	private static States states; 
+	private static States states;
 	private static boolean admin = false;
 	private static EmpregadoClinica objLogado = null;
-	
-	
-	private static JanelaPrincipal janela = new JanelaPrincipal();
-	
 
-	public static void main(String[] args) throws Exception{
-		
-		if(!Conexao.test()) return;
+	private static JanelaPrincipal janela = new JanelaPrincipal();
+
+	public static void main(String[] args) throws Exception {
+
+		if (!Conexao.test())
+			return;
 		Conexao.iniciar();
 		try {
-			UIManager.setLookAndFeel(
-				UIManager.getSystemLookAndFeelClassName());
-		} 
-		catch (Exception e) {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (Exception e) {
 
 		}
 		states = new States(janela);
 		SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-            	janela.setVisible(true);
-        		deslogar();
-            }
-        });
+			public void run() {
+				janela.setVisible(true);
+				deslogar();
+			}
+		});
 
 		System.out.println("Iniciando app!");
 	}
 
-
-	
 	/*
 	 * metodos de logon e logoff
-	 * */
-	public static void logar(EmpregadoClinica id_){
-			if(id_ == null)return;
-			objLogado = id_;
-			logado = true;
-			janela.definirLogado();
-			janela.setTitle("Bem vindo: " + objLogado.toString());
-			
-			if(id_.isProfsaude()){
-				StateInicio.ativarProfSaude();
-				ControllerRegistro.logou();
-				janela.ativarProfSaude();
-			}
-			else if(id_.isFuncadmin()){
-				StateInicio.ativarFuncadmin();
-				janela.ativarFuncadmin();
-			}
-				
-			
-			states.go("inicio");
+	 */
+	public static void logar(EmpregadoClinica id_) {
+		if (id_ == null)
+			return;
+		objLogado = id_;
+		logado = true;
+		janela.definirLogado();
+		janela.setTitle("Bem vindo: " + objLogado.toString());
+
+		if (id_.isProfsaude()) {
+			StateInicio.ativarProfSaude();
+			ControllerRegistro.logou();
+			janela.ativarProfSaude();
+		} else if (id_.isFuncadmin()) {
+			StateInicio.ativarFuncadmin();
+			janela.ativarFuncadmin();
+		}
+
+		states.go("inicio");
 
 	}
-	public static void deslogar(){
-			id = "";
-			objLogado = null;
-			logado = false;
-			janela.definirDeslogado();
-			states.go("login");
-		
+
+	public static void deslogar() {
+		id = "";
+		objLogado = null;
+		logado = false;
+		janela.definirDeslogado();
+		states.go("login");
+
 	}
-	public static boolean isLogado(){
+
+	public static boolean isLogado() {
 		return logado;
 	}
-	public static void setAdmin(boolean q){
+
+	public static void setAdmin(boolean q) {
 		admin = q;
-	} 
-	private boolean isAdmin(){
+	}
+
+	private boolean isAdmin() {
 		return admin;
 	}
-	
-	
+
 	public static EmpregadoClinica getObjLogado() {
 		return objLogado;
 	}
-
-
 
 	public static void setObjLogado(EmpregadoClinica objLogado) {
 		ControllerPrincipal.objLogado = objLogado;
 	}
 
-
-
 	/*
 	 * munca de states
-	 * */
-	public static ActionListener mudador(String onde){
+	 */
+	public static ActionListener mudador(String onde) {
 		return new Mudador(onde);
 	}
-	static class Mudador implements ActionListener{
+
+	static class Mudador implements ActionListener {
 		private String destino;
-		public Mudador(String onde){
+
+		public Mudador(String onde) {
 			super();
 			destino = onde;
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
-			if(destino.equals("sair")){
+
+			if (destino.equals("sair")) {
 				deslogar();
-			}
-			else{
+			} else {
 				states.go(destino);
 			}
 		}
-		
+
 	}
-	
-	
-	public static void gritar(String oq, String titulo){
-		JOptionPane.showMessageDialog(janela, oq, titulo, JOptionPane.ERROR_MESSAGE);
+
+	// janelas
+	public static void gritar(String oq, String titulo) {
+		JOptionPane.showMessageDialog(janela, oq, titulo,
+				JOptionPane.ERROR_MESSAGE);
 	}
-	public static void gritar(String oq){
+
+	public static void gritar(String oq) {
 		JOptionPane.showMessageDialog(janela, oq);
 	}
-	public static int perguntar(String oq, String titulo){
-		return JOptionPane.showConfirmDialog(janela, oq, titulo, JOptionPane.OK_CANCEL_OPTION);
+
+	public static boolean perguntar(String oq, String titulo) {
+		int escolha = JOptionPane.showConfirmDialog(janela, oq, titulo,
+				JOptionPane.OK_CANCEL_OPTION);
+		if (escolha == JOptionPane.OK_OPTION) {
+			return true;
+		}
+		return false;
 	}
 
+	// helpers
+	// helper para ver se string é int
+	public static boolean isInteger(String s) {
+		try {
+			Integer.parseInt(s);
+		} catch (NumberFormatException e) {
+			return false;
+		} catch (NullPointerException e) {
+			return false;
+		}
+		// only got here if we didn't return false
+		return true;
+	}
 
-
-	
-	
-	
+	// helper para ver se string é log
+	public static boolean isLong(String s) {
+		try {
+			Long.parseLong(s);
+		} catch (NumberFormatException e) {
+			return false;
+		} catch (NullPointerException e) {
+			return false;
+		}
+		// only got here if we didn't return false
+		return true;
+	}
 
 }

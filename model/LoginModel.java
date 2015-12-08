@@ -5,26 +5,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-
+import controllers.ControllerPrincipal;
 
 
 import model.dbos.Acesso;
 
+
 public class LoginModel extends Model{
 	private static ArrayList<Acesso> acessos = new ArrayList<Acesso>();
 	
-	//helper para ver se string é int
-	private static boolean isInteger(String s) {
-	    try { 
-	        Integer.parseInt(s); 
-	    } catch(NumberFormatException e) { 
-	        return false; 
-	    } catch(NullPointerException e) {
-	        return false;
-	    }
-	    // only got here if we didn't return false
-	    return true;
-	}
+	
 	
 	public static Acesso login(String login, char[] senha_) {
 		Acesso achado;
@@ -36,7 +26,7 @@ public class LoginModel extends Model{
 		//procurar na lista
 		for(int i = 0; i < acessos.size(); i++){
 			Acesso este = acessos.get(i);
-			if(isInteger(este.getLogin())){ //é funcadmin
+			if(ControllerPrincipal.isInteger(este.getLogin())){ //é funcadmin
 				if( (este.getLogin().equals(login)) && (este.getSenha().equals(senha)) ){
 					return este;
 				}
@@ -81,6 +71,7 @@ public class LoginModel extends Model{
 				acessos.add(new Acesso(rstExiste.getInt("Id") ,rstExiste.getString("Login"), rstExiste.getString("Senha")));
 			}
 		} catch (SQLException e) {
+			ControllerPrincipal.gritar("Erro de conexão com o banco de dados", "O banco não está aqui");
 			e.printStackTrace();
 		}
 		

@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-
+import controllers.ControllerPrincipal;
 
 
 
@@ -30,6 +30,7 @@ public class PacientesModel extends Model{
 						);
 			}
 		} catch (SQLException e) {
+			ControllerPrincipal.gritar("Erro de conexão com o banco de dados", "O banco não está aqui");
 			e.printStackTrace();
 		}
 	}
@@ -73,6 +74,7 @@ public class PacientesModel extends Model{
 			}
 			
 		} catch (SQLException e) {
+			ControllerPrincipal.gritar("Erro de conexão com o banco de dados", "O banco não está aqui");
 			e.printStackTrace();
 		}
 	}

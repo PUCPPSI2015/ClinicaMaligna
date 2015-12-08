@@ -2,59 +2,57 @@ package model;
 
 import java.sql.*;
 
-
 import model.harddata.Cargos;
 import model.harddata.Especialidades;
 import model.harddata.Profissoes;
 
 public class Conexao {
-	
-	
-	
-	private final static String 	DBDRIVER = "com.mysql.jdbc.Driver",
-					DBURL = "jdbc:mysql://localhost:3306/clinicamaligna",
-					DBUSER = "root",
-					DBPASS = "";
-	
+
+	private final static String DBDRIVER = "com.mysql.jdbc.Driver",
+			DBURL = "jdbc:mysql://localhost:3306/clinicamaligna",
+			DBUSER = "root", DBPASS = "";
+
 	private static Connection con;
 
-	
-	public static boolean test(){
-		try{
-			//tentar conexao;
+	public static boolean test() {
+		try {
+			// tentar conexao;
 			con = DriverManager.getConnection(DBURL, DBUSER, DBPASS);
-			//critar statment
+			// critar statment
 			Statement stmTeste = con.createStatement();
-			//executar query
+			// executar query
 			ResultSet rstTeste = stmTeste.executeQuery("select * from acesso");
-			
-			//processar resultados
-			while(rstTeste.next()){}
+
+			// processar resultados
+			while (rstTeste.next()) {
+			}
 			System.out.println("Deu tudo certo na conexao");
 			return true;
-			
-		}catch(Exception e){
+
+		} catch (Exception e) {
 			System.out.println("Deu xabu na conexao");
 			return false;
 		}
-		
+
 	}
-	
-	public static void iniciar(){
+
+	public static void iniciar() {
 		try {
 			con = DriverManager.getConnection(DBURL, DBUSER, DBPASS);
-			//preencher hard datas
+			// preencher hard datas
 			Cargos.preencher();
 			Profissoes.preencher();
 			Especialidades.preencher();
 		} catch (SQLException e) {
 			System.out.println("Deu xabu na conexao");
-		}	
+		}
 	}
-	public static Connection getCon(){
+
+	public static Connection getCon() {
 		return con;
 	}
-	public static Statement getStm(Connection c){
+
+	public static Statement getStm(Connection c) {
 		try {
 			return c.createStatement();
 		} catch (SQLException e) {
